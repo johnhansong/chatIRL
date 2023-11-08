@@ -1,2 +1,2 @@
-# Meeteor
+# ChatIRL
 Meetup Clone
