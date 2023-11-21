@@ -2,7 +2,89 @@
 
 ## Database Schema Design
 
-`<insert database schema design here>`
+Table user {
+  id INTEGER PK
+  firstName VARCHAR
+  lastName VARCHAR
+  email VARCHAR
+  username VARCHAR
+  hashedPassword BINARYSTRING
+  membership OBJECT
+}
+
+Table group {
+  id INTEGER PK
+  organizerId INTEGER
+  name VARCHAR
+  about VARCHAR
+  type VARCHAR
+  private BOOLEAN
+  state VARCHAR(2)
+  createdAt CURRENT_TIMESTAMP
+  updatedAt CURRENT_TIMESTAMP
+  numMembers INTEGER
+  previewImage VARCHAR
+  membership OBJECT
+}
+
+Table venue {
+  id INTEGER PK
+  groupId INTEGER
+  address VARCHAR
+  state VARCHAR(2)
+  lat DECIMAL
+  lng DECIMAL
+}
+
+Table event {
+  id INTEGER PK
+  groupId INTEGER
+  venueId INTEGER
+  name VARCHAR
+  type VARCHAR
+  startDate TIMESTAMP
+  endDate TIMESTAMP
+  numAttending INTEGER
+  previewImage VARCHAR
+}
+
+Table membership {
+  id INTEGER PK
+  userId INTEGER
+  groupId INTEGER
+  status VARCHAR
+}
+
+Table attendance {
+  id INTEGER PK
+  userId INTEGER
+  groupId INTEGER
+  status VARCHAR
+}
+
+Table images {
+  id INTEGER PK
+  groupId INTEGER
+  eventId INTEGER
+  image VARCHAR
+}
+
+ref: group.organizerId < user.id
+
+ref: venue.groupId <> group.id
+
+ref: event.groupId > group.id
+ref: event.venueId > venue.id
+
+ref: membership.userId > user.id
+ref: membership.groupId > group.id
+
+ref: attendance.userId > user.id
+ref: attendance.groupId > group.id
+
+ref: images.groupId > group.id
+ref: images.eventId > event.id
+
 
 ## API Documentation
 
@@ -1972,7 +2054,7 @@ Return events filtered by query parameters.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: /events/parameters
+  * URL: /events/[pagination]
   * Query Parameters
     * page: integer, minimum: 1, maximum: 10, default: 1
     * size: integer, minimum: 1, maximum: 20, default: 20
