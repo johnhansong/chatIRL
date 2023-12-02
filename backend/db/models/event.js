@@ -11,6 +11,28 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+
+      Event.hasMany(models.Image, {
+        foreignKey: 'imageableId',
+        constraints: false,
+        scope: {
+          imageableType: "Event"
+        },
+        onDelete: 'CASCADE'
+      })
+
+      Event.hasMany(models.attendance, {
+        foreignKey: 'eventId',
+        onDelete: "CASCADE"
+      })
+
+      Event.belongsTo(models.Group, {
+        foreignKey: 'groupId'
+      })
+
+      Event.belongsTo(models.Venue, {
+        foreignKey: 'venueId',
+      })
     }
   }
   Event.init({
@@ -51,14 +73,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull:false,
       validate: {
-        ifAfter: Sequelize.literal('CURRENT_TIMESTAMP')
+        ifAfter: sequelize.literal('CURRENT_TIMESTAMP')
       }
     },
     endDate: {
       type: DataTypes.DATE,
       allowNull:false,
       validate: {
-        isBefore: startDate.DATE
+        isBefore: Event.startDate
       }
     }
   }, {

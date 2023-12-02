@@ -16,16 +16,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       groupId: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Groups",
+          key: "id"
+        }
       },
       venueId: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Venue",
+          key: "id"
+        }
       },
       name: {
         type: Sequelize.STRING,

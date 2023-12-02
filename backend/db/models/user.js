@@ -5,6 +5,20 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       // define association here
+      User.hasMany(models.Group, {
+        foreignKey: "organizerId",
+        onDelete: "CASCADE"
+      });
+
+      User.hasMany(models.Membership, {
+        foreignKey: "UserId",
+        onDelete: 'CASCADE'
+      })
+
+      User.hasMany(models.Attendance, {
+        foreignKey: "UserId",
+        onDelete: 'CASCADE'
+      })
     }
   };
 
