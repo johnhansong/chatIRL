@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       imageableType: {
-        type: Sequelize.STRING
+        type: Sequelize.ENUM(['Group', 'Event'])
       },
       image: {
         type: Sequelize.STRING
@@ -23,11 +23,13 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        default: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        default: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },

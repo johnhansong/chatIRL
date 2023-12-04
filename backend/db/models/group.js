@@ -16,10 +16,11 @@ module.exports = (sequelize, DataTypes) => {
 
       Group.hasMany(models.Image, {
         foreignKey: 'imageableId',
-        onDelete: 'CASCADE',
+        constraints: false,
         scope: {
           imageableType: "Group"
-        }
+        },
+        onDelete: 'CASCADE'
       })
 
       Group.hasMany(models.membership, {

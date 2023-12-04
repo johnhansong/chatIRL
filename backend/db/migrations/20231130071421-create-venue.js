@@ -15,13 +15,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      // groupId: {
-      //   type: Sequelize.INTEGER,
-      //   references: {
-      //     model: 'Group',
-      //     key: 'groupId'
-      //   }
-      // },
+      groupId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Group',
+          key: 'groupId'
+        }
+      },
       address: {
         type: Sequelize.STRING,
         allowNull: false

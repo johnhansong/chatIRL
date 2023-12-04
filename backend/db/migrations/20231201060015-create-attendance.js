@@ -22,18 +22,21 @@ module.exports = {
         references: {
           model: 'Events',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       status: {
         type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        default: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        default: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },

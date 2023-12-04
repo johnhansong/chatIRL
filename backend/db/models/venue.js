@@ -15,6 +15,8 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "venueId",
         onDelete: "CASCADE"
       })
+
+      Venue.belongsTo(model.Groups, { foreignKey: 'groupId' })
     }
   }
   Venue.init({

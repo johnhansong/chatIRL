@@ -9,19 +9,30 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
+    getImageable() {
+      const type = get.imageableType;
+      if (type === 'Group') {
+        return this.getGroup()
+      } else {
+        return this.getEvent()
+      }
+    }
+
     static associate(models) {
       // define association here
       Image.belongsTo(models.Group, {
-        foreignKey: 'imageableId'
+        foreignKey: 'imageableId',
+        constraints: false
       });
       Image.belongsTo(models.Event, {
-        foreignKey: 'imageableId'
+        foreignKey: 'imageableId',
+        constraints: false
       })
     }
   }
   Image.init({
     imageableId: DataTypes.INTEGER,
-    imageableType: DataTypes.STRING,
+    imageableType: DataTypes.ENUM(['Group', 'Event']),
     image: DataTypes.STRING,
     preview: DataTypes.BOOLEAN
   }, {
