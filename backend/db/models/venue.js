@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Venue.hasMany(models.Events, {
+      Venue.hasMany(models.Event, {
         foreignKey: "venueId",
         onDelete: "CASCADE"
       })
 
-      Venue.belongsTo(models.Groups, { foreignKey: 'groupId' })
+      Venue.belongsTo(models.Group, { foreignKey: 'groupId' })
     }
   }
   Venue.init({
