@@ -16,9 +16,10 @@ Table group {
   id INTEGER PK
   organizerId INTEGER
   name VARCHAR
-  about VARCHAR
+  about TEXT
   type VARCHAR
   private BOOLEAN
+  city VARCHAR
   state VARCHAR(2)
   createdAt CURRENT_TIMESTAMP
   updatedAt CURRENT_TIMESTAMP
