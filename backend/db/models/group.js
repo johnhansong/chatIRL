@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE'
       })
 
-      Group.hasMany(models.membership, {
+      Group.hasMany(models.Membership, {
         foreignKey: 'groupId',
         onDelete: "CASCADE"
       })
