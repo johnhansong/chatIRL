@@ -85,7 +85,7 @@ app.use((err, _req, _res, next) => {
 // Error formatter. Sends the response back to the client
 app.use((err, _req, res, _next) => {
     res.status(err.status || 500);
-    console.error(err); //eventually remove
+    // console.error(err); //eventually remove
     res.json({
         title: err.title || 'Server Error',
         message: err.message,

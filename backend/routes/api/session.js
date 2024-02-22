@@ -1,8 +1,7 @@
-const express = require('express')
-const router = express.Router();
-
 const { Op } = require('sequelize');
+const express = require('express')
 const bcrypt = require('bcryptjs');
+const router = express.Router();
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models');
@@ -49,6 +48,8 @@ router.post(
 
     const safeUser = {
         id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         username: user.username,
     };
@@ -78,6 +79,8 @@ router.get(
         if (user) {
         const safeUser = {
             id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
             email: user.email,
             username: user.username,
         };
