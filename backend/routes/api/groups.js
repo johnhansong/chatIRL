@@ -16,6 +16,8 @@ const validateGroup = [
     .exists({checkFalsy: true})
     .isLength({max: 60})
     .withMessage("Name must be 60 characters or less")
+
+    //check []
 ]
 
 router.get('/',
