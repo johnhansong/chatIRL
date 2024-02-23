@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE"
       })
 
-      Group.hasMany(models.User, {
-        foreignKey: 'OrganizerId',
+      Group.belongsTo(models.User, {
+        foreignKey: 'organizerId',
         onDelete: "CASCADE"
       })
     }

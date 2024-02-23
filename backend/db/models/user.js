@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
           len: [3, 256],
           isEmail: true
         },
-        defaultValue: 'Empty'
+        // defaultValue: 'Empty'
       },
       hashedPassword: {
         type: DataTypes.STRING.BINARY,
@@ -59,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           len: [60, 60]
         },
-        defaultValue: 'Empty'
+        // defaultValue: 'Empty'
       }
     },
     {
