@@ -23,8 +23,8 @@ module.exports = {
         capacity: "15",
         price: "5.00",
         description: "A fun 6v6 fast paced game of soccer. Cleats required",
-        startDate: "02/28/2026",
-        endDate: "03/28/2026"
+        startDate: "2026-02-28 8:00:00",
+        endDate: "2026-03-28 12:00:00"
       },
       {
         groupId: 1,
@@ -34,8 +34,8 @@ module.exports = {
         capacity: "15",
         price: "5.00",
         description: "A fun 6v6 fast paced game of soccer. Cleats required",
-        startDate: "04/28/2026",
-        endDate: "05/28/2026"
+        startDate: "2026-04-28 8:00:00",
+        endDate: "2026-05-28 11:00:00"
       },
       {
         groupId: 2,
@@ -45,8 +45,8 @@ module.exports = {
         capacity: "20",
         price: "0.00",
         description: "Come join us for gym raids. Must be able to drive or have a ride.",
-        startDate: "02/28/2026",
-        endDate: "03/28/2026"
+        startDate: "2026-06-28 1:30:00",
+        endDate: "2026-07-28 5:00:00"
       },
       {
         groupId: 3,
@@ -56,8 +56,8 @@ module.exports = {
         capacity: "15",
         price: "5.00",
         description: "Join our clash team next weekend! ($5 will be refunded after the tournament ends)",
-        startDate: "06/24/2026",
-        endDate: "06/25/2026"
+        startDate: "2026-04-25 4:00:00",
+        endDate: "2026-04-26 6:30:00"
       }
     ])
   },

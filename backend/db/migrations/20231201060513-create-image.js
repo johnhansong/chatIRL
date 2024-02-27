@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       imageableType: {
-        type: Sequelize.ENUM(['Group', 'Event'])
+        type: Sequelize.ENUM(['group', 'event'])
       },
       image: {
         type: Sequelize.STRING

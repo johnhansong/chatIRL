@@ -11,13 +11,14 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       User.hasMany(models.Membership, {
-        foreignKey: "UserId",
+        as: 'Membership',
+        foreignKey: "userId",
         onDelete: 'CASCADE'
       })
 
       User.hasMany(models.Attendance, {
         as: 'Attendance',
-        foreignKey: "UserId",
+        foreignKey: "userId",
         onDelete: 'CASCADE'
       })
     }

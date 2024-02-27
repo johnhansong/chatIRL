@@ -9,18 +9,17 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       // define association here
-      Group.belongsTo(models.User, {
-        as: "Organizer",
-        foreignKey: 'organizerId',
-      })
+      Group.belongsTo(models.User, { foreignKey: 'organizerId' })
 
       Group.hasMany(models.Venue, {
         foreignKey: 'groupId',
         onDelete: "CASCADE",
       })
+
       Group.hasMany(models.Event, {
         foreignKey: 'groupId',
-        onDelete: 'CASCADE',      })
+        onDelete: 'CASCADE',
+      })
 
       Group.hasMany(models.Membership, {
         foreignKey: 'groupId',
@@ -31,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'imageableId',
         constraints: false,
         scope: {
-          imageableType: "Group"
+          imageableType: "group"
         },
         onDelete: 'CASCADE'
       })
@@ -42,43 +41,34 @@ module.exports = (sequelize, DataTypes) => {
     organizerId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'User',
+        model: 'Users',
         key: 'id'
       },
-      allowNull:false,
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
       validate: {
         len: [0, 60],
       }
     },
     about: {
       type: DataTypes.TEXT,
-      allowNull:false,
       validate: {
         len: [50, 1000]
       }
     },
     type: {
       type: DataTypes.STRING,
-      allowNull:false,
       validate: {
         isIn: [['Online', 'In person']]
       }
     },
-    private: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    city: {
-      type: DataTypes.STRING,
-      allowNull:false,
-    },
+
+    private: DataTypes.BOOLEAN,
+    city: DataTypes.STRING,
+
     state: {
       type: DataTypes.STRING,
-      allowNull:false,
       validate: {
         len: [2, 2]
       }
@@ -93,11 +83,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Group',
-    // defaultScope: {
-    //   attributes: {
-    //     exclude: ['createdAt', "updatedAt", "previewImage"]
-    //   }
-    // }
   });
   return Group;
 };

@@ -43,7 +43,7 @@ module.exports = {
         previewImage: null
       },
       {
-        organizerId: 4,
+        organizerId: 2,
         name: "Pokemon Go",
         about: "Calling all trainers in the South Bay to connect for raids, missions, trades, and more fun! South Bay residents in California only.",
         type: "In Person",
