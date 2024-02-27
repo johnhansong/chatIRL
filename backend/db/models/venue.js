@@ -15,8 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "venueId",
         onDelete: "CASCADE"
       })
-
-      Venue.belongsTo(models.Group, { foreignKey: 'groupId' })
+      Venue.belongsTo(models.Group, {
+        foreignKey: 'groupId',
+        onDelete:'CASCADE'
+      })
     }
   }
   Venue.init({

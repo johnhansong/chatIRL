@@ -18,21 +18,19 @@ module.exports = {
       groupId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Group',
-          key: 'groupId'
-        }
+          model: 'Groups',
+          key: 'id'
+        },
+        onDelete: "CASCADE"
       },
       address: {
         type: Sequelize.STRING,
-        allowNull: false
       },
       city: {
         type: Sequelize.STRING,
-        allowNull: false
       },
       state: {
         type: Sequelize.STRING(2),
-        allowNull: false
       },
       lat: {
         type: Sequelize.DECIMAL

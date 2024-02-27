@@ -9,9 +9,22 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       // define association here
+      Group.belongsTo(models.User, {
+        as: "Organizer",
+        foreignKey: 'organizerId',
+      })
+
+      Group.hasMany(models.Venue, {
+        foreignKey: 'groupId',
+        onDelete: "CASCADE",
+      })
       Group.hasMany(models.Event, {
-        foreignKey: 'eventId',
-        onDelete: 'CASCADE'
+        foreignKey: 'groupId',
+        onDelete: 'CASCADE',      })
+
+      Group.hasMany(models.Membership, {
+        foreignKey: 'groupId',
+        onDelete: "CASCADE",
       })
 
       Group.hasMany(models.Image, {
@@ -23,20 +36,15 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE'
       })
 
-      Group.hasMany(models.Membership, {
-        foreignKey: 'groupId',
-        onDelete: "CASCADE"
-      })
-
-      Group.belongsTo(models.User, {
-        foreignKey: 'organizerId',
-        onDelete: "CASCADE"
-      })
     }
   }
   Group.init({
     organizerId: {
       type: DataTypes.INTEGER,
+      references: {
+        model: 'User',
+        key: 'id'
+      },
       allowNull:false,
     },
     name: {
@@ -85,11 +93,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Group',
-    defaultScope: {
-      attributes: {
-        exclude: ['createdAt', "updatedAt", "previewImage"]
-      }
-    }
+    // defaultScope: {
+    //   attributes: {
+    //     exclude: ['createdAt', "updatedAt", "previewImage"]
+    //   }
+    // }
   });
   return Group;
 };

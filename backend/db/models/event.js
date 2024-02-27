@@ -27,17 +27,15 @@ module.exports = (sequelize, DataTypes) => {
       })
 
       Event.belongsTo(models.Group, { foreignKey: 'groupId' })
-      Event.belongsTo(models.Venue, { foreignKey: 'venueId', })
+      Event.belongsTo(models.Venue, { foreignKey: 'venueId' })
     }
   }
   Event.init({
     groupId: {
       type: DataTypes.INTEGER,
-      allowNull:false
     },
     venueId: {
       type: DataTypes.INTEGER,
-      allowNull:false
     },
     name: {
       type: DataTypes.STRING,
@@ -59,7 +57,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     capacity: {
       type: DataTypes.INTEGER,
-      allowNull:false
     },
     price: {
       type: DataTypes.DECIMAL(10,2)

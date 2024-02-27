@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Membership.init({
     userId: DataTypes.INTEGER,
-    eventId: DataTypes.INTEGER,
+    groupId: DataTypes.INTEGER,
     status: {
       type: DataTypes.STRING,
       validate: {

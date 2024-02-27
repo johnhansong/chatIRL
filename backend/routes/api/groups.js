@@ -1,10 +1,9 @@
 const { Op } = require('sequelize');
 const express = require('express')
+const sequelize = require('sequelize')
 const bcrypt = require('bcryptjs');
-
 const router = express.Router();
 
-const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { Group, Membership } = require('../../db/models');
 
 // express validation
@@ -29,10 +28,23 @@ const validateGroup = [
     check('state')
 ]
 
+//Get all Groups
 router.get(
     '/',
     async (req, res, next) => {
-    const groups = await Group.findAll();
+    const groups = await Group.findAll({
+        include: [
+            {
+            model: Membership,
+            },
+        ],
+        attributes: {
+            include:
+                [sequelize.fn("COUNT", sequelize.col('Memberships.id')), "numMembers"]
+        }
+    });
 
     res.status(200).json(groups)
 });
+
+module.exports = router;
