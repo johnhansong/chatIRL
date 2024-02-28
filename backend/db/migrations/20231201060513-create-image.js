@@ -21,7 +21,7 @@ module.exports = {
       imageableType: {
         type: Sequelize.ENUM(['group', 'event'])
       },
-      image: {
+      imageURL: {
         type: Sequelize.STRING
       },
       preview: {

@@ -22,7 +22,6 @@ module.exports = {
         private: "false",
         city: "Oakland",
         state: "CA",
-        previewImage: null
       },
       {
         organizerId: 2,
@@ -32,7 +31,6 @@ module.exports = {
         private: "true",
         city: "Richmond",
         state: "CA",
-        previewImage: null
       },
       {
         organizerId: 3,
@@ -42,7 +40,6 @@ module.exports = {
         private: "false",
         city: "San Francisco",
         state: "CA",
-        previewImage: null
       },
       {
         organizerId: 2,
@@ -52,7 +49,6 @@ module.exports = {
         private: "false",
         city: "Santa Clara",
         state: "CA",
-        previewImage: null
       }
     ])
   },

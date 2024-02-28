@@ -23,19 +23,17 @@ module.exports = (sequelize, DataTypes) => {
       Image.belongsTo(models.Group, {
         foreignKey: 'imageableId',
         constraints: false,
-        onDelete: "CASCADE"
       });
       Image.belongsTo(models.Event, {
         foreignKey: 'imageableId',
         constraints: false,
-        onDelete: "CASCADE"
       })
     }
   }
   Image.init({
     imageableId: DataTypes.INTEGER,
     imageableType: DataTypes.ENUM(['Group', 'Event']),
-    image: DataTypes.STRING,
+    imageURL: DataTypes.STRING,
     preview: DataTypes.BOOLEAN
   }, {
     sequelize,

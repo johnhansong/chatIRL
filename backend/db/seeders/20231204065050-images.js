@@ -15,27 +15,39 @@ module.exports = {
     // options.tableName = 'Images'
     await Image.bulkCreate([
       {
-        imagableId: 1,
+        imageableId: 1,
         imageableType: 'Group',
-        image: 'https://picsum.photos/201',
+        imageURL: 'https://picsum.photos/211',
         preview: true
       },
       {
-        imagableId: 2,
+        imageableId: 2,
         imageableType: 'Group',
-        image: 'https://picsum.photos/202',
+        imageURL: 'https://picsum.photos/202',
         preview: false
       },
       {
-        imagableId: 3,
-        imageableType: 'Event',
-        image: 'https://picsum.photos/203',
-        preview: false
+        imageableId: 3,
+        imageableType: 'Group',
+        imageURL: 'https://picsum.photos/213',
+        preview: true
       },
       {
-        imagableId: 4,
+        imageableId: 1,
         imageableType: 'Event',
-        image: 'https://picsum.photos/204',
+        imageURL: 'https://picsum.photos/211',
+        preview: true
+      },
+      {
+        imageableId: 2,
+        imageableType: 'Event',
+        imageURL: 'https://picsum.photos/212',
+        preview: true
+      },
+      {
+        imageableId: 3,
+        imageableType: 'Event',
+        imageURL: 'https://picsum.photos/203',
         preview: false
       },
     ])
@@ -45,7 +57,7 @@ module.exports = {
     options.tableName = 'Images';
     const Op = Sequelize.Op;
     await queryInterface.bulkDelete(options, {
-      id: { [Op.in]: [1, 2, 3, 4] }
+      id: { [Op.in]: [1, 2, 3] }
     })
   }
 };

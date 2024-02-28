@@ -57,9 +57,9 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      previewImage: {
-        type: Sequelize.STRING
-      },
+      // previewImage: {
+      //   type: Sequelize.STRING
+      // },
     }, options);
   },
   async down(queryInterface, Sequelize) {

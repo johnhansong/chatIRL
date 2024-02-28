@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'imageableId',
         constraints: false,
         scope: {
-          imageableType: "group"
+          imageableType: "Group"
         },
         onDelete: 'CASCADE'
       })
@@ -73,13 +73,13 @@ module.exports = (sequelize, DataTypes) => {
         len: [2, 2]
       }
     },
-    previewImage: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        isURL: true,
-      },
-    }
+    // previewImage: {
+    //   type: DataTypes.STRING,
+    //   allowNull: true,
+    //   validate: {
+    //     isURL: true,
+    //   },
+    // }
   }, {
     sequelize,
     modelName: 'Group',
