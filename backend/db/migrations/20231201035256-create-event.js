@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 
 let options = {};
-if (process.env.NODE_ENV = 'production') {
+if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA
 }
 
@@ -68,10 +68,10 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    });
+    }, options);
   },
   async down(queryInterface, Sequelize) {
     options.tableName = 'Events'
-    await queryInterface.dropTable(options);
+    return queryInterface.dropTable(options);
   }
 };
