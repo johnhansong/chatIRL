@@ -1,5 +1,6 @@
 'use strict';
 
+const { Attendance } = require("../models")
 
 /** @type {import('sequelize-cli').Migration} */
 
@@ -10,9 +11,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    options.tableName = 'Attendances';
-    await queryInterface.bulkInsert(options, [
+  up: async (queryInterface, Sequelize) => {
+    // options.tableName = 'Attendances';
+    await Attendance.bulkCreate([
       {
         userId: 1,
         eventId: 1,

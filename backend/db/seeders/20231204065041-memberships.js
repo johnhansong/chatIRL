@@ -1,5 +1,7 @@
 'use strict';
 
+const { Membership } = require("../models")
+
 /** @type {import('sequelize-cli').Migration} */
 
 // const { group } = require('../models')
@@ -9,9 +11,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    options.tableName = 'Memberships';
-    await queryInterface.bulkInsert(options, [
+  up: async (queryInterface, Sequelize) => {
+    // options.tableName = 'Memberships';
+    await Membership.bulkCreate([
       {
         userId: 1,
         groupId: 1,

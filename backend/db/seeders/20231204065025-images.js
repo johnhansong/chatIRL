@@ -1,5 +1,7 @@
 'use strict';
 
+const { Image } = require("../models")
+
 /** @type {import('sequelize-cli').Migration} */
 
 // const { group } = require('../models')
@@ -9,9 +11,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    options.tableName = 'Images'
-    await queryInterface.bulkInsert(options, [
+  up: async (queryInterface, Sequelize) => {
+    // options.tableName = 'Images'
+    await Image.bulkCreate([
       {
         imagableId: 1,
         imageableType: 'Group',

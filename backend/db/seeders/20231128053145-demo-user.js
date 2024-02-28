@@ -1,5 +1,8 @@
 'use strict';
 
+const { User } = require("../models")
+// note: create dynamic seeders once routes tested and working
+
 const bcrypt = require("bcryptjs");
 
 let options = {};
@@ -8,9 +11,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    options.tableName = 'Users';
-    await queryInterface.bulkInsert(options, [
+  up: async (queryInterface, Sequelize) => {
+    // options.tableName = 'Users';
+    await User.bulkCreate([
       {
         firstName: 'John',
         lastName: 'Doe',

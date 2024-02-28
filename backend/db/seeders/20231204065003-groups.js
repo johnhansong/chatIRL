@@ -2,6 +2,8 @@
 
 /** @type {import('sequelize-cli').Migration} */
 
+const { Group } = require("../models")
+
 // const { group } = require('../models')
 let options = {};
 if (process.env.NODE_ENV === 'production') {
@@ -9,9 +11,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    options.tableName =  "Groups";
-    await queryInterface.bulkInsert(options, [
+  up: async (queryInterface, Sequelize) => {
+    // options.tableName =  "Groups";
+    await Group.bulkCreate([
       {
         organizerId: 1,
         name: "Speed Soccer",

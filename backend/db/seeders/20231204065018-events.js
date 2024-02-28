@@ -1,7 +1,6 @@
 'use strict';
 
-const { User } = require('../models');
-const bcrypt = require("bcryptjs");
+const { Event } = require('../models');
 
 /** @type {import('sequelize-cli').Migration} */
 
@@ -12,9 +11,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    options.tableName = 'Events'
-    await queryInterface.bulkInsert(options, [
+  up: async (queryInterface, Sequelize) => {
+    // options.tableName = 'Events'
+    await Event.bulkCreate([
       {
         groupId: 1,
         venueId: 1,
