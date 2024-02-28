@@ -40,10 +40,10 @@ module.exports = (sequelize, DataTypes) => {
   Group.init({
     organizerId: {
       type: DataTypes.INTEGER,
-      references: {
-        model: 'Users',
-        key: 'id'
-      },
+      // references: {
+      //   model: 'Users',
+      //   key: 'id'
+      // },
     },
     name: {
       type: DataTypes.STRING,

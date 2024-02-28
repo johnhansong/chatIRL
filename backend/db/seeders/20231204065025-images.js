@@ -18,25 +18,25 @@ module.exports = {
         imagableId: 1,
         imageableType: 'Group',
         image: 'https://picsum.photos/201',
-        preview: True
+        preview: true
       },
       {
         imagableId: 2,
         imageableType: 'Group',
         image: 'https://picsum.photos/202',
-        preview: False
+        preview: false
       },
       {
         imagableId: 3,
         imageableType: 'Event',
         image: 'https://picsum.photos/203',
-        preview: False
+        preview: false
       },
       {
         imagableId: 4,
         imageableType: 'Event',
         image: 'https://picsum.photos/204',
-        preview: False
+        preview: false
       },
     ])
   },

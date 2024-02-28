@@ -45,7 +45,7 @@ module.exports = {
         status: 'pending'
       },
       {
-        userId: 4,
+        userId: 3,
         groupId: 2,
         status: 'co-host'
       },
@@ -56,7 +56,7 @@ module.exports = {
     options.tableName = 'Memberships';
     const Op = Sequelize.Op;
     await queryInterface.bulkDelete(options, {
-      userId: { [Op.in]: [1, 2, 3, 4]}
+      userId: { [Op.in]: [1, 2, 3] }
     })
   }
 };
