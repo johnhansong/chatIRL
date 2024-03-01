@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       // define association here
-      Group.belongsTo(models.User, { foreignKey: 'organizerId' })
+      Group.belongsTo(models.User, {
+        as: 'Organizer',
+        foreignKey: 'organizerId'
+      })
 
       Group.hasMany(models.Venue, {
         foreignKey: 'groupId',
@@ -27,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       })
 
       Group.hasMany(models.Image, {
+        as: "GroupImages",
         foreignKey: 'imageableId',
         constraints: false,
         scope: {
