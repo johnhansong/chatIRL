@@ -13,7 +13,7 @@ const {
     handleValidationErrors,
     venueExistsValidation,
     isOrgValidation,
-    isHostValidation
+    isHostValidation,
 } = require('../../utils/validation');
 
 const validateVenue = [

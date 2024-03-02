@@ -44,6 +44,11 @@ module.exports = {
         city: "Irvine",
         state: "CA",
       },
+      {
+        groupId: 5,
+        city: "Oakland",
+        state: "CA",
+      },
     ])
   },
 

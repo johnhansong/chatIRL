@@ -4,7 +4,7 @@ const sequelize = require('sequelize')
 
 const router = express.Router();
 
-const { User, Group, Membership, Venue, Image } = require('../../db/models');
+const { User, Group, Membership, Attendance, Venue, Event, Image } = require('../../db/models');
 
 // express validation
 const { check } = require('express-validator');
@@ -12,6 +12,8 @@ const { requireAuth } = require('../../utils/auth');
 const {
     handleValidationErrors,
     groupExistsValidation,
+    venueExistsValidation,
+    validateDates,
     isOrgValidation,
     isHostValidation
 } = require('../../utils/validation');
@@ -43,6 +45,29 @@ const validateGroup = [
     handleValidationErrors
 ];
 
+const validateEvent = [
+    check('name')
+        .exists({checkFalsy: true})
+        .isLength({min: 5})
+        .withMessage('Name must be at least 5 characters'),
+    check('type')
+        .exists({checkFalsy: true})
+        .isIn(['Online', 'In person'])
+        .withMessage("Type must be 'Online' or 'In person'"),
+    check('capacity')
+        .exists({checkFalsy: true})
+        .isInt({min: 0})
+        .withMessage("Capacity must be an integer"),
+    check('price')
+        .exists({checkFalsy: true})
+        .isFloat({min: 0.00})
+        .withMessage("Price is invalid"),
+    check('description')
+        .exists({checkFalsy: true})
+        .withMessage("Description is required"),
+    handleValidationErrors
+]
+
 //Get all Groups
 router.get(
     '/',
@@ -64,10 +89,8 @@ router.get(
             }
         ],
         attributes: {
-            include:[
-                [sequelize.fn("COUNT", sequelize.col('Memberships.id')), "numMembers"],
-                [sequelize.col('GroupImages.imageURL'), 'previewImage']
-            ]
+            include:[[sequelize.fn("COUNT", sequelize.col('Memberships.id')), "numMembers"],
+                    [sequelize.col('GroupImages.imageURL'), 'previewImage']]
         },
         group: ['Group.id']
     });
@@ -101,10 +124,8 @@ router.get(
             ]
         },
         attributes: {
-            include:[
-                [sequelize.fn("COUNT", sequelize.col('Memberships.id')), "numMembers"],
-                [sequelize.col('GroupImages.imageURL'), 'previewImage']
-            ]
+            include:[[sequelize.fn("COUNT", sequelize.col('Memberships.id')), "numMembers"],
+                    [sequelize.col('GroupImages.imageURL'), 'previewImage']]
         },
         group: ['Group.id']
     })
@@ -184,7 +205,7 @@ router.post(
             preview: newImage.preview
         }
 
-    return res.json(safeImage)
+    return res.status(200).json(safeImage)
     }
 )
 
@@ -262,6 +283,81 @@ router.post(
             lng: newVenue.lng
         }
     res.status(200).json(safeVenue)
+    }
+)
+
+//Get all Events of a Group specified by its id
+router.get(
+    '/:groupId/events',
+    groupExistsValidation,
+    async (req, res, next) => {
+        const eventsById = await Event.findAll({
+            include: [
+                {
+                    model: Attendance,
+                    attributes: [],
+                    where: {status: "attending"},
+                    required: false
+                },
+                {
+                    model: Image, as: 'EventImages',
+                    attributes: [],
+                    where: {
+                        imageableType: 'Event',
+                        preview: true
+                    },
+                    required: false
+                },
+                {
+                    model: Group,
+                    attributes: ['id', 'name', 'city',  'state']
+                },
+                {
+                    model: Venue,
+                    attributes: ['id', 'city', 'state']
+                }
+            ],
+            where: {groupId: req.params.groupId},
+            attributes: {
+                include: [[sequelize.fn("COUNT", sequelize.col('Attendances.id')), "numAttending"],
+                            [sequelize.col("EventImages.imageURL"), 'previewImage']],
+                exclude: ['createdAt', 'updatedAt']
+            }
+        })
+    res.status(200).json(eventsById)
+    }
+)
+
+//Create an Event for a Group specified by its id
+router.post(
+    '/:groupId/events',
+    requireAuth, validateEvent, validateDates,
+    venueExistsValidation, groupExistsValidation,
+    [isOrgValidation || isHostValidation],
+    async (req, res, next) => {
+        const { venueId, name, type,
+            capacity, price, description,
+            startDate, endDate} = req.body;
+
+        const newEvent = await Event.create({
+            groupId: req.params.groupId,
+            venueId, name, type, capacity, price, description,
+            startDate, endDate,
+        })
+
+        const safeEvent = {
+            id: newEvent.id,
+            groupId: newEvent.groupId,
+            venueId: newEvent.venueId,
+            name: newEvent.name,
+            type: newEvent.type,
+            capacity: newEvent.capacity,
+            price: newEvent.price,
+            description: newEvent.description,
+            startDate: newEvent.startDate,
+            endDate: newEvent.endDate
+        }
+        res.status(200).json(safeEvent)
     }
 )
 

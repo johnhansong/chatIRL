@@ -49,7 +49,16 @@ module.exports = {
         private: "false",
         city: "Santa Clara",
         state: "CA",
-      }
+      },
+      {
+        organizerId: 4,
+        name: "IU Uaenas",
+        about: "If you're a Uaena, come join us at the Oakland Arena in the heart of Oakland, CA to watch IU perform! IU will be visiting on April 29th at 7:30pm. Tickets start at $248.",
+        type: "In Person",
+        private: "false",
+        city: "Oakland",
+        state: "CA",
+      },
     ])
   },
 
@@ -61,6 +70,7 @@ module.exports = {
                         "League of Legends",
                         "AJR SF",
                         "Pokemon Go",
+                        "IU US Tour"
                         ]
             }
     }, {})

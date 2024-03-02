@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
 
       Event.hasMany(models.Image, {
-        as: 'EventImage',
+        as: 'EventImages',
         foreignKey: 'imageableId',
         constraints: false,
         scope: {

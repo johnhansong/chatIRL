@@ -27,6 +27,12 @@ module.exports = {
         preview: false
       },
       {
+        imageableId: 2,
+        imageableType: 'Group',
+        imageURL: 'https://picsum.photos/212',
+        preview: true
+      },
+      {
         imageableId: 3,
         imageableType: 'Group',
         imageURL: 'https://picsum.photos/213',
@@ -50,6 +56,12 @@ module.exports = {
         imageURL: 'https://picsum.photos/203',
         preview: false
       },
+      {
+        imageableId: 4,
+        imageableType: 'Event',
+        imageURL: 'https://picsum.photos/213',
+        preview: true
+      },
     ])
   },
 
@@ -57,7 +69,7 @@ module.exports = {
     options.tableName = 'Images';
     const Op = Sequelize.Op;
     await queryInterface.bulkDelete(options, {
-      id: { [Op.in]: [1, 2, 3] }
+      id: { [Op.in]: [1, 2, 3, 4] }
     })
   }
 };
