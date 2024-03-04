@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const { Group, Venue, Event, Membership } = require('../db/models')
+const { Group, Venue, Event, Membership, Attendance } = require('../db/models')
 const { check } = require('express-validator');
 
 // middleware for formatting errors from express-validator middleware
@@ -153,7 +153,7 @@ const isOrgOrHostEvent = async (req, _res, next) => {
 
 const isOrgOrHostVenue = async (req, _res, next) => {
     const currVenue = await Venue.findByPk(req.params.venueId)
-    const currGroup = await Group.findbyPk(currVenue.groupId)
+    const currGroup = await Group.findByPk(currVenue.groupId)
     const currMember = await Membership.findOne({
         where: {    groupId: currGroup.id,
                     userId: req.user.id},
@@ -223,14 +223,13 @@ const isMember = async (req, _res, next) => {
 
 const isAttending = async (req, _res, next) => {
     const currEvent = await Event.findByPk(req.params.eventId)
-    const currGroup = await Group.findByPk(currEvent.groupId)
-    const currMember = await Membership.findOne({
-        where: {    groupId: currGroup.id,
+    const currAttendee = await Attendance.findOne({
+        where: {    eventId: currEvent.id,
                     userId: req.user.id},
     });
-    if (currMember == null) return next()
+    if (currAttendee == null) return next()
 
-    if (currMember.status == 'pending') {
+    if (currAttendee.status == 'pending') {
         const err = new Error("Attendance has already been requested");
         err.status = 400;
         return next(err)

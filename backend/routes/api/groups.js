@@ -104,6 +104,7 @@ router.get(
 //Get all Groups joined or organized by the Current User
 router.get(
     '/current',
+    requireAuth,
     async (req, res, next) => {
     const currGroups = await Group.findAll({
         include: [
@@ -122,10 +123,7 @@ router.get(
             }
         ],
         where: {
-            [Op.or]: [
-                {'$Memberships.userId$': req.user.id},
-                {organizerId: req.user.id},
-            ]
+            [Op.or]: [{organizerId: req.user.id}, {"$Memberships.userId$": req.user.id}]
         },
         attributes: {
             include:[[sequelize.fn("COUNT", sequelize.col('Memberships.id')), "numMembers"],
@@ -133,7 +131,8 @@ router.get(
         },
         group: ['Group.id']
     })
-    res.status(200).json({currGroups})
+    console.log(await Group.findAll())
+    res.status(200).json({"Groups": currGroups})
 });
 
 
@@ -156,7 +155,8 @@ router.get(
                 where: {
                     imageableType: 'Group'
                 },
-                attributes: ['id', 'imageURL', 'preview']
+                attributes: ['id', 'imageURL', 'preview'],
+                required: false
             },
             {
                 model: User,
@@ -175,6 +175,7 @@ router.get(
             }
         ],
     })
+    console.log("HERE", await Group.findByPk(req.params.groupId))
 
     res.status(200).json(groupDetails)
 })
@@ -194,7 +195,7 @@ router.post(
 // Add an Image to a Group based on the Group's id
 router.post(
     '/:groupId/images',
-    groupExistsValidation, isOrgValidation, requireAuth,
+    requireAuth, groupExistsValidation, isOrgValidation,
     async (req, res, next) => {
         const { url, preview } = req.body;
         const newImage = await Image.create({
@@ -216,7 +217,7 @@ router.post(
 //Edit a Group
 router.put(
     '/:groupId',
-    groupExistsValidation, isOrgValidation, requireAuth, validateGroup,
+    requireAuth, groupExistsValidation, isOrgValidation, validateGroup,
     async (req, res, next) => {
         //find the relevant group using groupId
         let currGroup = await Group.findByPk(req.params.groupId);
@@ -237,7 +238,7 @@ router.put(
 //Delete a Group
 router.delete(
     '/:groupId',
-    groupExistsValidation, requireAuth, isOrgValidation,
+    requireAuth, groupExistsValidation, isOrgValidation,
     async (req, res, next) => {
         let currGroup = await Group.findByPk(req.params.groupId)
         await currGroup.destroy();
@@ -249,7 +250,7 @@ router.delete(
 //Get All Venues for a Group specified by its id
 router.get(
     '/:groupId/venues',
-    groupExistsValidation, requireAuth, isOrgOrHostGroup,
+    requireAuth, groupExistsValidation, isOrgOrHostGroup,
     async (req, res, next) => {
     let groupVenues = await Group.findByPk(req.params.groupId, {
         attributes: [],
@@ -269,7 +270,7 @@ router.get(
 //Create a new Venue for a Group specified by its id
 router.post(
     '/:groupId/venues',
-    groupExistsValidation, requireAuth, isOrgOrHostGroup,
+    requireAuth, groupExistsValidation, isOrgOrHostGroup,
     async (req, res, next) => {
         const { address, city, state, lat, lng } = req.body;
         const newVenue = await Venue.create({

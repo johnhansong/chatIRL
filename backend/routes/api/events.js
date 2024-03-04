@@ -303,6 +303,8 @@ router.post(
             userId: attendance.userId,
             status: attendance.status
         }
+
+        res.status(200).json(safeAttendee)
     }
 )
 
