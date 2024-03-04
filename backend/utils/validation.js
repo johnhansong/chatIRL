@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const { Group, Venue, Event, Membership, Attendance } = require('../db/models')
+const { User, Group, Venue, Event, Membership, Attendance, Image } = require('../db/models')
 const { check } = require('express-validator');
 
 // middleware for formatting errors from express-validator middleware
@@ -13,10 +13,10 @@ const handleValidationErrors = (req, _res, next) => {
         .array()
         .forEach(error => errors[error.path] = error.msg);
 
-    const err = Error("Bad request.");
+    const err = Error("Bad request");
     err.errors = errors;
     err.status = 400;
-    err.title = "Bad request.";
+    err.title = "Bad request";
     next(err);
     }
     next();
@@ -125,11 +125,32 @@ const isOrgOrHostGroup = async (req, _res, next) => {
             userId: req.user.id
         }
     })
-    if (req.user.id == currGroup.organizerId || currMember.status == 'co-host') return next();
+    if (currMember && (currMember.status  == 'co-host') ||
+        currGroup.organizerId == req.user.id)
+        return next()
 
     const err = new Error("Forbidden")
     err.status = 403;
     err.title = "Authorization required";
+    return next(err)
+}
+
+const isOrgOrHostImg = async (req, _res, next) => {
+    const currImg = await Image.findByPk(req.params.imageId)
+    const currGroup = await Group.findByPk(currImg.imageableId)
+    const currMember = await Membership.findOne({
+        where: {groupId: currGroup.id,
+            userId: req.user.id}
+        })
+
+
+        if (currMember && (currMember.status  == 'co-host') ||
+        currGroup.organizerId == req.user.id)
+        return next()
+
+    const err = new Error("Forbidden")
+    err.status = 403;
+    err.title = "Forbidden";
     return next(err)
 }
 
@@ -141,8 +162,8 @@ const isOrgOrHostEvent = async (req, _res, next) => {
                     userId: req.user.id},
     })
 
-    if ((currMember && currMember.status)  == 'co-host' ||
-        (currMember && currGroup.organizerId == req.user.id))
+    if (currMember && (currMember.status  == 'co-host') ||
+        currGroup.organizerId == req.user.id)
         return next()
 
     const err = new Error("Forbidden")
@@ -159,8 +180,8 @@ const isOrgOrHostVenue = async (req, _res, next) => {
                     userId: req.user.id},
     })
 
-    if ((currMember && currMember.status)  == 'co-host' ||
-        (currMember && currGroup.organizerId == req.user.id))
+    if (currMember && (currMember.status  == 'co-host') ||
+        currGroup.organizerId == req.user.id)
         return next()
 
     const err = new Error("Forbidden")
@@ -189,7 +210,7 @@ const validateDates = [
         .exists({checkFalsy: true})
         .custom(date => {
             let startDate = new Date(date);
-            if (startDate < new Date()) return false;
+            if (startDate < new Date(Date.now())) return false;
             else return true;
         })
         .withMessage("Start date must be in the future"),
@@ -221,6 +242,32 @@ const isMember = async (req, _res, next) => {
     return next(err)
 }
 
+const changeStatusAuth = async (req, _res, next) => {
+    const { memberId, status } = req.body
+    const currGroup = await Group.findByPk(req.params.groupId);
+    const pendingUser = await User.findByPk(memberId)
+    const pendingMember = await Membership.findOne({
+        where: {groupId: currGroup.id,
+                userId: pendingUser.id}
+    })
+    const currMember = await Membership.findOne({
+        where: {groupId: currGroup.id,
+                userId: req.user.id}
+    })
+
+    if (status == 'co-host' &&
+        currMember.id == currGroup.organizerId) return next()
+
+    if (status == 'member' &&
+        (currMember.id == currGroup.organizerId ||
+        currMember.status == 'co-host')) return next()
+
+        const err = new Error("Forbidden")
+        err.status = 403;
+        err.title = "Authorization required";
+        return next(err)
+}
+
 const isAttending = async (req, _res, next) => {
     const currEvent = await Event.findByPk(req.params.eventId)
     const currAttendee = await Attendance.findOne({
@@ -240,6 +287,8 @@ const isAttending = async (req, _res, next) => {
     }
 }
 
+
+
 module.exports = {
     handleValidationErrors,
     groupExistsValidation,
@@ -249,10 +298,12 @@ module.exports = {
     isOrgOrHostEvent,
     isOrgOrHostGroup,
     isOrgOrHostVenue,
+    isOrgOrHostImg,
     validateDates,
     isOrgValidation,
     isHostValidation,
     isAttendeeValidation,
+    changeStatusAuth,
     isMember,
     isAttending,
     deleteMembership

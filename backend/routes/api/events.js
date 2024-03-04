@@ -13,6 +13,7 @@ const {
     handleValidationErrors,
     venueExistsValidation,
     eventExistsValidation,
+    isAttendeeValidation,
     validateDates,
     isOrgOrHostEvent,
     isAttending,
@@ -38,18 +39,19 @@ const validateEvent = [
     check('description')
         .exists({checkFalsy: true})
         .withMessage("Description is required"),
+    validateDates,
     handleValidationErrors
 ]
 
 const validatePagination = [
     check('page')
-        .exists({checkFalsy: true})
+        .optional()
         .isInt({min: 1})
-        .withMessage("Page must be grater than or equal to 1"),
+        .withMessage("Page must be greater than or equal to 1"),
     check('size')
-        .exists({checkFalsy: true})
+        .optional()
         .isInt({min: 1})
-        .withMessage("Size must be grater than or equal to 1"),
+        .withMessage("Size must be greater than or equal to 1"),
     check('name')
         .optional()
         .isString()
@@ -70,8 +72,6 @@ router.get(
     '/',
     validatePagination,
     async (req, res, next) => {
-
-    const { name, type, startDate } = req.body;
 
     let pagination = {}
     const page = req.query.page === undefined ? 1 : parseInt(req.query.page);
@@ -173,6 +173,7 @@ router.post(
 
         const eventImg = await Image.create({
             imageableId: req.params.eventId,
+            imageableType: 'Event',
             imageURL: url,
             preview
         });
@@ -189,8 +190,8 @@ router.post(
 //Edit an Event specified by its id
 router.put(
     '/:eventId',
-    requireAuth, eventExistsValidation, venueExistsValidation,
-    validateEvent, validateDates,
+    requireAuth, venueExistsValidation, eventExistsValidation,
+    validateEvent, isOrgOrHostEvent,
     async (req, res, next) => {
         let currEvent = await Event.findByPk(req.params.eventId)
 
@@ -223,7 +224,7 @@ router.put(
 //Delete an Event specified by its id
 router.delete(
     '/:eventId',
-    eventExistsValidation, requireAuth,
+    requireAuth, eventExistsValidation,
     isOrgOrHostEvent,
     async (req, res, next) => {
         let currEvent = await Event.findByPk(req.params.eventId)
@@ -277,7 +278,7 @@ router.get(
 //Request to Attend an Event based on the Event's id
 router.post(
     '/:eventId/attendance',
-    eventExistsValidation, requireAuth, isAttending,
+    requireAuth, eventExistsValidation, isAttendeeValidation, isAttending,
     async (req, res, next) => {
         const currEvent = await Event.findByPk(req.params.eventId)
         const currGroup = await Group.findByPk(currEvent.groupId)

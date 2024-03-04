@@ -1,15 +1,17 @@
 const express = require('express')
 const router = express.Router();
+
 const { Group, Membership, Image } = require('../../db/models');
 
 // express validation
 const { requireAuth } = require('../../utils/auth');
+const { isOrgOrHostImg } = require('../../utils/validation')
 
 
 
 router.delete(
     '/:imageId',
-    requireAuth,
+    requireAuth, isOrgOrHostImg,
     async (req, res, next) => {
         const doomedImg = await Image.findOne({
             where: {imageableType: "Group",
@@ -23,18 +25,7 @@ router.delete(
         err.title = "Group Image couldn't be found"
         return next(err)
     }
-    const currGroup = await Group.findByPk(doomedImg.imageableId)
-    const currMember = await Membership.findOne(
-                        {groupId: currGroup.id,
-                        userId: req.user.id}
-                        )
 
-    if ((req.user.id != currGroup.organizerId) && (currMember.status != 'co-host')) {
-        const err = new Error("Forbidden");
-        err.status = 403;
-        err.title = "Forbidden"
-        return next(err)
-    }
 
     await doomedImg.destroy();
     res.status(200)

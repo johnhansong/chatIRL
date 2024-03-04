@@ -34,9 +34,10 @@ const validateVenue = [
     handleValidationErrors
 ]
 
+//edit a venue
 router.put(
     '/:venueId',
-    requireAuth, validateVenue, venueExistsValidation,
+    requireAuth, venueExistsValidation, validateVenue,
     isOrgOrHostVenue,
     async (req, res, next) => {
         let currVenue = await Venue.findByPk(req.params.venueId)

@@ -71,12 +71,8 @@ module.exports = (sequelize, DataTypes) => {
     private: DataTypes.BOOLEAN,
     city: DataTypes.STRING,
 
-    state: {
-      type: DataTypes.STRING,
-      validate: {
-        len: [2, 2]
-      }
-    },
+    state: DataTypes.STRING,
+
     // previewImage: {
     //   type: DataTypes.STRING,
     //   allowNull: true,

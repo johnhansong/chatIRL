@@ -19,6 +19,7 @@ const {
     isHostValidation,
     isOrgOrHostGroup,
     isMember,
+    changeStatusAuth,
     deleteMembership
 } = require('../../utils/validation');
 
@@ -37,7 +38,7 @@ const validateGroup = [
         .isIn(['Online', 'In person'])
         .withMessage("Type must be 'Online' or 'In person'"),
     check('private')
-        .exists({checkFalsy: true})
+        .exists({checkFalsy: false})
         .isBoolean()
         .withMessage("Private must be a boolean"),
     check('city')
@@ -69,6 +70,28 @@ const validateEvent = [
     check('description')
         .exists({checkFalsy: true})
         .withMessage("Description is required"),
+    validateDates,
+    handleValidationErrors
+]
+
+const validateVenue = [
+    check('address')
+        .exists({checkFalsy: true})
+        .withMessage("Street address is required"),
+    check('city')
+        .exists({checkFalsy: true})
+        .withMessage("City is required"),
+    check('state')
+        .exists({checkFalsy: true})
+        .withMessage("State is required"),
+    check('lat')
+        .exists({checkFalsy: true})
+        .isFloat({min: -90, max: 90})
+        .withMessage("Latitude is not valid"),
+    check('lng')
+        .exists({checkFalsy: true})
+        .isFloat({min: -180, max: 180})
+        .withMessage("Longitude is not valid"),
     handleValidationErrors
 ]
 
@@ -131,7 +154,13 @@ router.get(
         },
         group: ['Group.id']
     })
-    console.log(await Group.findAll())
+    if (!currGroups.length) {
+        const err = new Error('No groups found for current user')
+        err.status = 404
+        err.title = "No groups found for current user"
+        return next(err)
+    }
+
     res.status(200).json({"Groups": currGroups})
 });
 
@@ -175,8 +204,6 @@ router.get(
             }
         ],
     })
-    console.log("HERE", await Group.findByPk(req.params.groupId))
-
     res.status(200).json(groupDetails)
 })
 
@@ -189,7 +216,7 @@ router.post(
             organizerId: req.user.id,
             name, about, type, private, city, state
         })
-    res.status(200).json(group)
+    res.status(201).json(group)
 });
 
 // Add an Image to a Group based on the Group's id
@@ -198,8 +225,10 @@ router.post(
     requireAuth, groupExistsValidation, isOrgValidation,
     async (req, res, next) => {
         const { url, preview } = req.body;
+        const currGroup = Group.findByPk(req.params.groupId)
         const newImage = await Image.create({
             imageableId: req.params.groupId,
+            imageableType: 'Group',
             imageURL: url,
             preview
         });
@@ -264,13 +293,14 @@ router.get(
             ]
         }
     })
-    res.status(200).json(groupVenues)
+
+    res.status(200).json({"Venues": groupVenues})
 })
 
 //Create a new Venue for a Group specified by its id
 router.post(
     '/:groupId/venues',
-    requireAuth, groupExistsValidation, isOrgOrHostGroup,
+    requireAuth, validateVenue, groupExistsValidation, isOrgOrHostGroup,
     async (req, res, next) => {
         const { address, city, state, lat, lng } = req.body;
         const newVenue = await Venue.create({
@@ -336,8 +366,8 @@ router.get(
 //Create an Event for a Group specified by its id
 router.post(
     '/:groupId/events',
-    requireAuth, validateEvent, validateDates,
-    venueExistsValidation, groupExistsValidation,
+    requireAuth, validateEvent,
+    venueExistsValidation, groupExistsValidation, isOrgOrHostGroup,
     async (req, res, next) => {
         const { venueId, name, type,
             capacity, price, description,
@@ -420,7 +450,7 @@ router.post(
                 userId: req.user.id
             }
         });
-        console.log(newMembership)
+
         newMembership = await Membership.create({
             groupId: req.params.groupId,
             userId: req.user.id,
@@ -439,9 +469,9 @@ router.post(
 //Change the status of a membership for a group specified by id
 router.put(
     '/:groupId/membership',
-    requireAuth, groupExistsValidation, membershipExistsValidation,
+    requireAuth, groupExistsValidation, membershipExistsValidation, changeStatusAuth,
     async (req, res, next) => {
-    const { memberId, status } = req.body
+    const { memberId, status } = req.body;
     let currMembership = await Membership.findOne({
         where: {
             groupId: req.params.groupId,
@@ -479,7 +509,7 @@ router.put(
 //Delete membership to a group specified by id
 router.delete(
     '/:groupId/membership/:memberId',
-    deleteMembership, groupExistsValidation,
+    requireAuth, deleteMembership, groupExistsValidation,
     async (req, res, next) => {
         const memberId = req.params.memberId;
 
