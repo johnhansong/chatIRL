@@ -66,15 +66,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull:false,
       validate: {
-        ifAfter: sequelize.literal('CURRENT_TIMESTAMP')
+        isAfter: new Date(Date.now())
+                .toLocaleString('en-us', {hour12:false})
+                .split('/').join('-')
+                .split(',').join(' ')
       }
     },
     endDate: {
       type: DataTypes.DATE,
       allowNull:false,
-      validate: {
-        isBefore: Event.startDate
-      }
+      // validate: {
+      //   // isAfter: Event.startDate,
+      // },
     }
   }, {
     sequelize,

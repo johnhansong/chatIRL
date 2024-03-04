@@ -1,7 +1,4 @@
-const { Op } = require('sequelize');
 const express = require('express')
-const sequelize = require('sequelize')
-
 const router = express.Router();
 
 const { Venue } = require('../../db/models');
@@ -12,8 +9,8 @@ const { requireAuth } = require('../../utils/auth');
 const {
     handleValidationErrors,
     venueExistsValidation,
-    isOrgValidation,
-    isHostValidation,
+    isOrgOrHostVenue,
+
 } = require('../../utils/validation');
 
 const validateVenue = [
@@ -39,9 +36,8 @@ const validateVenue = [
 
 router.put(
     '/:venueId',
-    requireAuth,
-    validateVenue, venueExistsValidation,
-    [isOrgValidation || isHostValidation],
+    requireAuth, validateVenue, venueExistsValidation,
+    isOrgOrHostVenue,
     async (req, res, next) => {
         let currVenue = await Venue.findByPk(req.params.venueId)
         const { address, city, state, lat, lng } = req.body;

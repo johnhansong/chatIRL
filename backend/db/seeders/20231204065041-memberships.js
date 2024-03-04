@@ -32,7 +32,7 @@ module.exports = {
       {
         userId: 3,
         groupId: 1,
-        status: 'member'
+        status: 'pending'
       },
       {
         userId: 1,
