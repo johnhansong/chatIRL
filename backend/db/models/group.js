@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Group.belongsTo(models.User, {
         as: 'Organizer',
-        foreignKey: 'organizerId'
+        foreignKey: 'organizerId',
+        onDelete: 'CASCADE'
       })
 
       Group.hasMany(models.Venue, {
