@@ -16,6 +16,7 @@ const {
     isAttendeeValidation,
     validateDates,
     isOrgOrHostEvent,
+    isPartOfEvent,
     isAttending,
 } = require('../../utils/validation');
 
@@ -166,13 +167,13 @@ router.get(
 //Add an Image to an Event based on the Event's id
 router.post(
     '/:eventId/images',
-    requireAuth, eventExistsValidation, isOrgOrHostEvent,
+    requireAuth, eventExistsValidation, isPartOfEvent,
     async (req, res, next) => {
         const { url, preview } = req.body;
         let currEvent = await Event.findByPk(req.params.eventId)
 
         const eventImg = await Image.create({
-            imageableId: req.params.eventId,
+            id: req.params.eventId,
             imageableType: 'Event',
             imageURL: url,
             preview
@@ -258,7 +259,7 @@ router.get(
                 },
                 attributes: ['id', 'firstName', 'lastName']
             })
-            res.status(200).json({"Attendee1": attendance})
+            res.status(200).json({"Attendees": attendance})
         } else {
             let attendance = await User.findAll({
                 include: {
@@ -271,7 +272,7 @@ router.get(
                 },
                 attributes: ['id', 'firstName', 'lastName']
             })
-            res.status(200).json({"Attendees2": attendance})
+            res.status(200).json({"Attendees": attendance})
         }
 });
 
@@ -353,7 +354,7 @@ router.delete(
     '/:eventId/attendance/:userId',
     requireAuth, eventExistsValidation,
     async (req, res, next) => {
-        const { userId } = req.body;
+        const userId = req.params.userId;
         const currEvent = await Event.findByPk(req.params.eventId)
         const currGroup = await Group.findByPk(currEvent.groupId)
 

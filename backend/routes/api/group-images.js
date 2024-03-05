@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 
-const { Group, Membership, Image } = require('../../db/models');
+const { Image } = require('../../db/models');
 
 // express validation
 const { requireAuth } = require('../../utils/auth');
@@ -15,7 +15,7 @@ router.delete(
     async (req, res, next) => {
         const doomedImg = await Image.findOne({
             where: {imageableType: "Group",
-                    imageableId: req.params.imageId
+                    id: req.params.imageId
             }
         })
 

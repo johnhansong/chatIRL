@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 
-const { Group, Event, Membership, Image } = require('../../db/models');
+const { Image } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const { isOrgOrHostImg } = require('../../utils/validation')
 
@@ -11,11 +11,8 @@ router.delete(
     async (req, res, next) => {
         const doomedImg = await Image.findOne({
             where: {imageableType: "Event",
-                    imageableId: req.params.imageId
-            }
+                    id: req.params.imageId}
         })
-
-        console.log(doomedImg)
 
     if (doomedImg == null) {
         const err = new Error("Event Image couldn't be found");

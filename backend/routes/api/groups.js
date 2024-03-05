@@ -408,7 +408,7 @@ router.get(
             }
         });
 
-        if (currMembership.status == "co-host" || req.user.id == currGroup.organizerId) {
+        if ((currMembership && currMembership.status == "co-host") || req.user.id == currGroup.organizerId) {
             let members = await User.findAll({
                 include: {
                     model: Membership, as: 'Membership',
@@ -467,17 +467,18 @@ router.post(
 )
 
 //Change the status of a membership for a group specified by id
+//FLAG TO INSTRUCTORS ABOUT API DOCS/TEST INCONSISTENCY
 router.put(
-    '/:groupId/membership',
+    '/:groupId/membership/',
     requireAuth, groupExistsValidation, membershipExistsValidation, changeStatusAuth,
     async (req, res, next) => {
     const { memberId, status } = req.body;
     let currMembership = await Membership.findOne({
         where: {
             groupId: req.params.groupId,
-            userId: req.user.id
-        }
+            userId: req.user.id}
     })
+
 
     const err = new Error("Validation Error")
     err.status = 400;
@@ -509,7 +510,7 @@ router.put(
 //Delete membership to a group specified by id
 router.delete(
     '/:groupId/membership/:memberId',
-    requireAuth, deleteMembership, groupExistsValidation,
+    requireAuth, groupExistsValidation, deleteMembership,
     async (req, res, next) => {
         const memberId = req.params.memberId;
 

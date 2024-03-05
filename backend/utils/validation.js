@@ -70,7 +70,8 @@ const membershipExistsValidation = async (req, _res, next) => {
 const deleteMembership = async (req, _res, next) => {
     const group = await Group.findByPk(req.params.groupId);
     const memberId = req.params.memberId;
-    if (group.organizerId == req.user.id || memberId == req.user.id) return next();
+    if ((group && group.organizerId == req.user.id) || memberId == req.user.id) return next();
+    if (!User.memberId) return next()
 
     const err = new Error("Forbidden")
     err.status = 403;
@@ -138,15 +139,16 @@ const isOrgOrHostGroup = async (req, _res, next) => {
 const isOrgOrHostImg = async (req, _res, next) => {
     const currImg = await Image.findByPk(req.params.imageId)
     const currGroup = await Group.findByPk(currImg.imageableId)
+    const currEvent = await Event.findByPk(currImg.imageableId)
     const currMember = await Membership.findOne({
         where: {groupId: currGroup.id,
             userId: req.user.id}
         })
+    const currEventsGroup = await Group.findByPk(currEvent.groupId)
 
-
-        if (currMember && (currMember.status  == 'co-host') ||
-        currGroup.organizerId == req.user.id)
-        return next()
+        if (currMember && (currMember.status  == 'co-host')) return next()
+        if (currGroup.organizerId == req.user.id ||
+            currEventsGroup.organizerId == req.user.id) return next()
 
     const err = new Error("Forbidden")
     err.status = 403;
@@ -165,6 +167,31 @@ const isOrgOrHostEvent = async (req, _res, next) => {
     if (currMember && (currMember.status  == 'co-host') ||
         currGroup.organizerId == req.user.id)
         return next()
+
+    const err = new Error("Forbidden")
+    err.status = 403;
+    err.title = "Forbidden";
+    return next(err)
+}
+
+const isPartOfEvent = async (req, _res, next) => {
+    const currEvent = await Event.findByPk(req.params.eventId)
+    const currGroup = await Group.findByPk(currEvent.groupId)
+    const currMember = await Membership.findOne({
+        where: {    groupId: currGroup.id,
+                    userId: req.user.id},
+    })
+
+    if (currMember && (currMember.status  == 'co-host') ||
+        currGroup.organizerId == req.user.id)
+        return next()
+
+    const currAttendee = await Attendance.findOne({
+        where: {    eventId: currEvent.id,
+                    userId: req.user.id},
+    });
+
+    if (currAttendee && currAttendee.status == 'attending') return next()
 
     const err = new Error("Forbidden")
     err.status = 403;
@@ -196,7 +223,8 @@ const isAttendeeValidation = async (req, _res, next) => {
     let currMember = await Membership.findOne({
         where: { groupId: group.id, userId: req.user.id }
     })
-    if (currMember.status == 'attending') return next();
+    console.log("HERE", currMember)
+    if (currMember && currMember.status != 'pending') return next();
 
     const err = new Error("Forbidden")
     err.status = 403;
@@ -245,20 +273,14 @@ const isMember = async (req, _res, next) => {
 const changeStatusAuth = async (req, _res, next) => {
     const { memberId, status } = req.body
     const currGroup = await Group.findByPk(req.params.groupId);
-    const pendingUser = await User.findByPk(memberId)
-    const pendingMember = await Membership.findOne({
-        where: {groupId: currGroup.id,
-                userId: pendingUser.id}
-    })
     const currMember = await Membership.findOne({
         where: {groupId: currGroup.id,
                 userId: req.user.id}
     })
 
-    if (status == 'co-host' &&
-        currMember.id == currGroup.organizerId) return next()
-
-    if (status == 'member' &&
+    if (currMember && currMember.id == currGroup.organizerId) return next()
+    if (status == 'pending') return next()
+    if (status == 'member' && currMember &&
         (currMember.id == currGroup.organizerId ||
         currMember.status == 'co-host')) return next()
 
@@ -302,6 +324,7 @@ module.exports = {
     validateDates,
     isOrgValidation,
     isHostValidation,
+    isPartOfEvent,
     isAttendeeValidation,
     changeStatusAuth,
     isMember,
