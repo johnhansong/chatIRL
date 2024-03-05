@@ -28,6 +28,7 @@ module.exports = {
           model: 'Events',
           key: 'id'
         },
+        onDelete: "CASCADE",
       },
       status: {
         type: Sequelize.STRING
