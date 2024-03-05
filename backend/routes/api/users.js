@@ -30,7 +30,7 @@ router.post(
         const hashedPassword = bcrypt.hashSync(password);
 
         const emailExists = await User.findOne({
-            email: req.body.email
+            where: {email: req.body.email}
         })
         if (emailExists) {
             const err = new Error("User already exists")
@@ -40,8 +40,9 @@ router.post(
         }
 
         const usernameExists = await User.findOne({
-            username: req.body.username
+            where: {username: req.body.username}
         })
+
         if (usernameExists) {
             const err = new Error("User already exists")
             err.status = 500;
