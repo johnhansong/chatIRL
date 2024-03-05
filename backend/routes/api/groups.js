@@ -119,7 +119,7 @@ router.get(
             include:[[sequelize.fn("COUNT", sequelize.col('Memberships.id')), "numMembers"],
                     [sequelize.col('GroupImages.imageURL'), 'previewImage']]
         },
-        group: ['Group.id']
+        group: ['Group.id', 'GroupImages.imageURL']
     });
     res.status(200).json({groups})
 });
