@@ -70,8 +70,15 @@ const membershipExistsValidation = async (req, _res, next) => {
 const deleteMembership = async (req, _res, next) => {
     const group = await Group.findByPk(req.params.groupId);
     const memberId = req.params.memberId;
+    const currMember = await Membership.findByPk(req.params.memberId)
+
+    if (!currMember) {
+        const err = new Error("User couldn't be found")
+        err.status = 404;
+        return next(err)
+    }
+
     if ((group && group.organizerId == req.user.id) || memberId == req.user.id) return next();
-    if (!User.memberId) return next()
 
     const err = new Error("Forbidden")
     err.status = 403;
@@ -138,17 +145,31 @@ const isOrgOrHostGroup = async (req, _res, next) => {
 
 const isOrgOrHostImg = async (req, _res, next) => {
     const currImg = await Image.findByPk(req.params.imageId)
-    const currGroup = await Group.findByPk(currImg.imageableId)
-    const currEvent = await Event.findByPk(currImg.imageableId)
-    const currMember = await Membership.findOne({
-        where: {groupId: currGroup.id,
-            userId: req.user.id}
-        })
-    const currEventsGroup = await Group.findByPk(currEvent.groupId)
 
-        if (currMember && (currMember.status  == 'co-host')) return next()
-        if (currGroup.organizerId == req.user.id ||
-            currEventsGroup.organizerId == req.user.id) return next()
+    if (currImg == null) return next()
+
+    if (currImg.imageableType == 'Group') {
+        const currGroup = await Group.findByPk(currImg.imageableId)
+        const currGroupMember = await Membership.findOne({
+            where: {groupId: currGroup.id,
+                userId: req.user.id}
+            })
+
+        if (currGroupMember && (currGroupMember.status  == 'co-host')) return next()
+        if (currGroup.organizerId == req.user.id) return next()
+    }
+
+    if (currImg.imageableType == 'Event') {
+        const currEvent = await Event.findByPk(currImg.imageableId)
+        const currEvtGroup = await Group.findByPk(currEvent.groupId)
+        if (currEvtGroup.organizerId == req.user.id) return next()
+
+        const currEventMember = await Membership.findOne({
+            where: { groupId: currEvtGroup.id,
+                userId: req.user.id}
+        })
+        if (currEventMember && (currEventMember.status == "co-host")) return next()
+    }
 
     const err = new Error("Forbidden")
     err.status = 403;
@@ -223,8 +244,7 @@ const isAttendeeValidation = async (req, _res, next) => {
     let currMember = await Membership.findOne({
         where: { groupId: group.id, userId: req.user.id }
     })
-    console.log("HERE", currMember)
-    if (currMember && currMember.status != 'pending') return next();
+    if (currMember && (currMember.status != 'pending')) return next();
 
     const err = new Error("Forbidden")
     err.status = 403;
@@ -271,14 +291,16 @@ const isMember = async (req, _res, next) => {
 }
 
 const changeStatusAuth = async (req, _res, next) => {
-    const { memberId, status } = req.body
+    const { status } = req.body
     const currGroup = await Group.findByPk(req.params.groupId);
     const currMember = await Membership.findOne({
         where: {groupId: currGroup.id,
                 userId: req.user.id}
     })
 
-    if (currMember && currMember.id == currGroup.organizerId) return next()
+    console.log(currMember)
+
+    if (currMember && (currMember.userId == currGroup.organizerId)) return next()
     if (status == 'pending') return next()
     if (status == 'member' && currMember &&
         (currMember.id == currGroup.organizerId ||
@@ -286,7 +308,6 @@ const changeStatusAuth = async (req, _res, next) => {
 
         const err = new Error("Forbidden")
         err.status = 403;
-        err.title = "Authorization required";
         return next(err)
 }
 
@@ -296,7 +317,22 @@ const isAttending = async (req, _res, next) => {
         where: {    eventId: currEvent.id,
                     userId: req.user.id},
     });
+
     if (currAttendee == null) return next()
+
+    const currGroup = await Group.findByPk(currEvent.groupId)
+    const currMember = await Membership.findOne({
+            where: {    groupId: currGroup.id,
+                        userId: req.user.id},
+    })
+    if (currMember == null) return next()
+
+    if (currMember.status == 'pending') {
+        const err = new Error('Forbidden');
+        err.status = 403;
+        err.title = "Forbidden"
+        return next(err)
+    }
 
     if (currAttendee.status == 'pending') {
         const err = new Error("Attendance has already been requested");

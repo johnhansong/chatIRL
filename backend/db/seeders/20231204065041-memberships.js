@@ -54,6 +54,11 @@ module.exports = {
         groupId: 4,
         status: 'co-host'
       },
+      {
+        userId: 4,
+        groupId: 5,
+        status: 'co-host'
+      },
     ])
   },
 

@@ -9,10 +9,8 @@ router.delete(
     '/:imageId',
     requireAuth, isOrgOrHostImg,
     async (req, res, next) => {
-        const doomedImg = await Image.findOne({
-            where: {imageableType: "Event",
-                    id: req.params.imageId}
-        })
+
+    const doomedImg = await Image.findByPk(req.params.imageId)
 
     if (doomedImg == null) {
         const err = new Error("Event Image couldn't be found");

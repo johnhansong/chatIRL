@@ -51,8 +51,8 @@ const validatePagination = [
         .withMessage("Page must be greater than or equal to 1"),
     check('size')
         .optional()
-        .isInt({min: 1})
-        .withMessage("Size must be greater than or equal to 1"),
+        .isInt({min: 1, max: 20})
+        .withMessage("Size must be between 1 and 20"),
     check('name')
         .optional()
         .isString()
@@ -106,17 +106,15 @@ router.get(
             {
                 model: Venue,
                 attributes: ['id', 'city', 'state']
-            }
+            },
         ],
         attributes: {
             include: [[sequelize.fn("COUNT", sequelize.col('Attendances.id')), "numAttending"],
                         [sequelize.col("EventImages.imageURL"), 'previewImage']],
             exclude: ['createdAt', 'updatedAt']
         },
-        group: ['Event.id', 'EventImages.imageURL', 'Group.id', 'Venue.id']
+        group: ['Event.id', 'EventImages.imageURL', 'Group.id', 'Venue.id'],
     });
-
-
 
     res.status(200).json({"Events": events.splice(pagination.offset, pagination.limit)})
 });
@@ -154,11 +152,15 @@ router.get(
             ],
             attributes: {
                 include: [[sequelize.fn("COUNT", sequelize.col('Attendances.id')), "numAttending"],
-                            [sequelize.col("EventImages.imageURL"), 'previewImage']],
+                            [sequelize.col("EventImages.imageURL"), 'previewImage'],
+                        'description',
+                        ],
                 exclude: ['createdAt', 'updatedAt']
             }
 
         })
+    console.log("#####", eventDetails.description)
+
     res.status(200).json(eventDetails)
     }
 )
@@ -173,7 +175,7 @@ router.post(
         let currEvent = await Event.findByPk(req.params.eventId)
 
         const eventImg = await Image.create({
-            id: req.params.eventId,
+            imageableId: parseInt(req.params.eventId),
             imageableType: 'Event',
             imageURL: url,
             preview
@@ -247,7 +249,7 @@ router.get(
                         userId: req.user.id},
         })
 
-        if (currMember && currMember.status == 'co-host' || req.user.id == currGroup.organizerId) {
+        if ((currMember && currMember.status == 'co-host') || req.user.id == currGroup.organizerId) {
             let attendance = await User.findAll({
                 include: {
                     model: Attendance, as: 'Attendance',
@@ -279,7 +281,7 @@ router.get(
 //Request to Attend an Event based on the Event's id
 router.post(
     '/:eventId/attendance',
-    requireAuth, eventExistsValidation, isAttendeeValidation, isAttending,
+    requireAuth, eventExistsValidation, isAttending,
     async (req, res, next) => {
         const currEvent = await Event.findByPk(req.params.eventId)
         const currGroup = await Group.findByPk(currEvent.groupId)
@@ -295,7 +297,7 @@ router.post(
             return next(err)
         }
 
-        attendance = await Attendance.create({
+        let attendance = await Attendance.create({
             eventId: req.params.eventId,
             userId: req.user.id,
             status: 'pending'
@@ -316,11 +318,18 @@ router.put(
     requireAuth, eventExistsValidation, isOrgOrHostEvent,
     async (req, res, next) => {
         const { userId, status } = req.body;
-
         let currAttendee = await Attendance.findOne({
             where: {eventId: req.params.eventId,
                     userId: userId}
         });
+        const currUser = await User.findByPk(userId)
+
+        if (!currUser) {
+            const err = new Error("User couldn't be found");
+            err.status = 404;
+            err.title - "User couldn't be found";
+            return next(err)
+        }
 
         if (status == 'pending') {
             const err = new Error("Cannot change an attendance status to pending")
@@ -357,6 +366,13 @@ router.delete(
         const userId = req.params.userId;
         const currEvent = await Event.findByPk(req.params.eventId)
         const currGroup = await Group.findByPk(currEvent.groupId)
+        const currUser = await User.findByPk(req.params.userId)
+
+        if (!currUser) {
+            const err = new Error("User couldn't be found");
+            err.status = 404;
+            return next(err)
+        }
 
         if (userId != currGroup.organizerId && userId != req.user.id) {
             const err = new Error("Only the User or organizer may delete an Attendance")

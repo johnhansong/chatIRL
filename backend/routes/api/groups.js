@@ -58,7 +58,7 @@ const validateEvent = [
     check('type')
         .exists({checkFalsy: true})
         .isIn(['Online', 'In person'])
-        .withMessage("Type must be 'Online' or 'In person'"),
+        .withMessage("Type must be Online or In person"),
     check('capacity')
         .exists({checkFalsy: true})
         .isInt({min: 0})
@@ -87,11 +87,11 @@ const validateVenue = [
     check('lat')
         .exists({checkFalsy: true})
         .isFloat({min: -90, max: 90})
-        .withMessage("Latitude is not valid"),
+        .withMessage("Latitude must be within -90 and 90"),
     check('lng')
         .exists({checkFalsy: true})
         .isFloat({min: -180, max: 180})
-        .withMessage("Longitude is not valid"),
+        .withMessage("Longitude must be within -180 and 180"),
     handleValidationErrors
 ]
 
@@ -217,6 +217,13 @@ router.post(
             organizerId: req.user.id,
             name, about, type, private, city, state
         })
+
+    await Membership.create({
+        userId: req.user.id,
+        groupId: group.id,
+        status: "co-host"
+    })
+
     res.status(201).json(group)
 });
 
@@ -295,7 +302,7 @@ router.get(
         }
     })
 
-    res.status(200).json({"Venues": groupVenues})
+    res.status(200).json(groupVenues)
 })
 
 //Create a new Venue for a Group specified by its id
@@ -311,7 +318,7 @@ router.post(
 
         const safeVenue = {
             id: newVenue.id,
-            groupId: newVenue.groupId,
+            groupId: parseInt(newVenue.groupId),
             address: newVenue.address,
             city: newVenue.city,
             state: newVenue.state,
@@ -358,7 +365,7 @@ router.get(
                 include: [[sequelize.fn("COUNT", sequelize.col('Attendances.id')), "numAttending"],
                             [sequelize.col("EventImages.imageURL"), 'previewImage']],
                 exclude: ['createdAt', 'updatedAt']
-            }
+            },
         })
     res.status(200).json(eventsById)
     }
@@ -380,9 +387,15 @@ router.post(
             startDate, endDate,
         })
 
+        await Attendance.create({
+            userId: req.user.id,
+            eventId: newEvent.id,
+            status: "attending"
+        })
+
         const safeEvent = {
             id: newEvent.id,
-            groupId: newEvent.groupId,
+            groupId: parseInt(newEvent.groupId),
             venueId: newEvent.venueId,
             name: newEvent.name,
             type: newEvent.type,
@@ -392,7 +405,7 @@ router.post(
             startDate: newEvent.startDate,
             endDate: newEvent.endDate
         }
-        res.status(200).json(safeEvent)
+        res.status(200).json({"Events": safeEvent})
     }
 )
 
@@ -477,7 +490,7 @@ router.put(
     let currMembership = await Membership.findOne({
         where: {
             groupId: req.params.groupId,
-            userId: req.user.id}
+            userId: memberId}
     })
 
 
