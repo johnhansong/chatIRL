@@ -156,11 +156,9 @@ router.get(
                         'description',
                         ],
                 exclude: ['createdAt', 'updatedAt']
-            }
-
+            },
+            group: ['Event.id', 'EventImages.url', 'Group.id', 'Venue.id']
         })
-    console.log("#####", eventDetails.description)
-
     res.status(200).json(eventDetails)
     }
 )

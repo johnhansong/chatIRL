@@ -362,7 +362,7 @@ router.get(
                             [sequelize.col("EventImages.imageURL"), 'previewImage']],
                 exclude: ['createdAt', 'updatedAt']
             },
-            group: ['Event.id']
+            group: ['Event.id', 'EventImages.imageURL', 'Group.id', 'Venue.id']
         })
     res.status(200).json(eventsById)
     }
