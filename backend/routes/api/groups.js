@@ -194,16 +194,10 @@ router.get(
             },
             {
                 model: Venue,
-                attributes: [
-                    'id',
-                    'groupId',
-                    'address',
-                    'city', 'state',
-                    'lat', 'lng'
-                ]
+                attributes: {exclude: ['createdAt', 'updatedAt']}
             }
         ],
-        group: ['Group.id', 'GroupImages.id', 'GroupImages.imageURL', 'Organizer.id']
+        group: ['Group.id', 'GroupImages.id', 'GroupImages.imageURL', 'Organizer.id', 'Venue.id']
     })
     res.status(200).json(groupDetails)
 })
