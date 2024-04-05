@@ -169,6 +169,7 @@ router.get(
 router.get(
     '/:groupId', groupExistsValidation,
     async (req, res, next) => {
+
     const groupDetails = await Group.findByPk(req.params.groupId, {
         attributes: {
             include: [[sequelize.fn("COUNT", sequelize.col('Memberships.id')), "numMembers"]]
@@ -194,10 +195,11 @@ router.get(
             },
             {
                 model: Venue,
-                attributes: {exclude: ['createdAt', 'updatedAt']}
+                attributes: {exclude: ['createdAt', 'updatedAt']},
             }
         ],
-        group: ['Group.id', 'GroupImages.id', 'GroupImages.imageURL', 'Organizer.id', 'Venue.id']
+        group: ['Group.id', 'GroupImages.id',
+                'Venues.id', 'Organizer.id']
     })
     res.status(200).json(groupDetails)
 })
