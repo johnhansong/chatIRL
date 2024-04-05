@@ -203,7 +203,7 @@ router.get(
                 ]
             }
         ],
-        group: ['Group.id', 'GroupImages.id', 'GroupImages.imageURL', 'Venue.id', 'Organizer.id']
+        group: ['Group.id', 'GroupImages.id', 'GroupImages.imageURL', 'Organizer.id']
     })
     res.status(200).json(groupDetails)
 })
