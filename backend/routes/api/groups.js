@@ -203,7 +203,7 @@ router.get(
                 ]
             }
         ],
-        group: ['Group.id', 'GroupImages.imageURL']
+        group: ['Group.id', 'GroupImages.id', 'GroupImages.imageURL']
     })
     res.status(200).json(groupDetails)
 })
@@ -366,6 +366,7 @@ router.get(
                             [sequelize.col("EventImages.imageURL"), 'previewImage']],
                 exclude: ['createdAt', 'updatedAt']
             },
+            group: ['Event.id']
         })
     res.status(200).json(eventsById)
     }
@@ -405,7 +406,7 @@ router.post(
             startDate: newEvent.startDate,
             endDate: newEvent.endDate
         }
-        res.status(200).json({"Events": safeEvent})
+        res.status(200).json(safeEvent)
     }
 )
 
