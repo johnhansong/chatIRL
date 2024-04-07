@@ -292,12 +292,7 @@ router.get(
         attributes: [],
         include: {
             model: Venue,
-            attributes: [
-                'id', 'groupId',
-                'address',
-                'city', 'state',
-                'lat', 'lng'
-            ]
+            attributes: {exclude: ["createdAt", "updatedAt"]}
         }
     })
 
@@ -321,8 +316,8 @@ router.post(
             address: newVenue.address,
             city: newVenue.city,
             state: newVenue.state,
-            lat: newVenue.lat,
-            lng: newVenue.lng
+            lat: parseInt(newVenue.lat),
+            lng: parseInt(newVenue.lng)
         }
     res.status(200).json(safeVenue)
     }
