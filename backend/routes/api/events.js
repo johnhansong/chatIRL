@@ -109,7 +109,7 @@ router.get(
             },
         ],
         attributes: {
-            include: [[sequelize.cast(sequelize.fn("COUNT", sequelize.col('Attendances.id')), integer), "numAttending"],
+            include: [[sequelize.cast(sequelize.fn("COUNT", sequelize.col('Attendances.id')), 'integer'), "numAttending"],
                         [sequelize.col("EventImages.imageURL"), 'previewImage']],
             exclude: ['createdAt', 'updatedAt']
         },
@@ -151,7 +151,7 @@ router.get(
                 }
             ],
             attributes: {
-                include: [[sequelize.cast(sequelize.fn("COUNT", sequelize.col('Attendances.id')), integer), "numAttending"],
+                include: [[sequelize.cast(sequelize.fn("COUNT", sequelize.col('Attendances.id')), 'integer'), "numAttending"],
                             [sequelize.col("EventImages.imageURL"), 'previewImage'],
                         'description',
                         ],
