@@ -152,7 +152,7 @@ router.get(
             [Op.or]: [{organizerId: req.user.id}, {"$Memberships.userId$": req.user.id}]
         },
         attributes: {
-            include:[[sequelize.fn("COUNT", sequelize.col('Memberships.id')), "numMembers"],
+            include:[[sequelize.cast(sequelize.fn("COUNT", sequelize.col('Memberships.id')), 'integer'), "numMembers"],
                     [sequelize.col('GroupImages.imageURL'), 'previewImage']]
         },
         group: ['Group.id', 'GroupImages.imageURL']
@@ -175,7 +175,7 @@ router.get(
 
     const groupDetails = await Group.findByPk(req.params.groupId, {
         attributes: {
-            include: [[sequelize.fn("COUNT", sequelize.col('Memberships.id')), "numMembers"]]
+            include: [[sequelize.cast(sequelize.fn("COUNT", sequelize.col('Memberships.id')), 'integer'), "numMembers"]],
         },
         include: [
             {
