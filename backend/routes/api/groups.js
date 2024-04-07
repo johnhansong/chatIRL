@@ -361,7 +361,7 @@ router.get(
             ],
             where: {groupId: req.params.groupId},
             attributes: {
-                include: [[sequelize.fn("COUNT", sequelize.col('Attendances.id')), "numAttending"],
+                include: [[sequelize.cast(sequelize.fn("COUNT", sequelize.col('Attendances.id')), integer), "numAttending"],
                             [sequelize.col("EventImages.imageURL"), 'previewImage']],
                 exclude: ['createdAt', 'updatedAt']
             },
