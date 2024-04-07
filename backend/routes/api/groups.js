@@ -35,8 +35,8 @@ const validateGroup = [
         .withMessage("About must be 50 characters or more"),
     check('type')
         .exists({checkFalsy: true})
-        .isIn(['Online', 'In person'])
-        .withMessage("Type must be 'Online' or 'In person'"),
+        .isIn(['Online', 'In Person'])
+        .withMessage("Type must be 'Online' or 'In Person'"),
     check('private')
         .exists({checkFalsy: false})
         .isBoolean()
@@ -57,8 +57,8 @@ const validateEvent = [
         .withMessage('Name must be at least 5 characters'),
     check('type')
         .exists({checkFalsy: true})
-        .isIn(['Online', 'In person'])
-        .withMessage("Type must be Online or In person"),
+        .isIn(['Online', 'In Person'])
+        .withMessage("Type must be Online or In Person"),
     check('capacity')
         .exists({checkFalsy: true})
         .isInt({min: 0})
@@ -116,11 +116,14 @@ router.get(
             }
         ],
         attributes: {
-            include:[[sequelize.fn("COUNT", sequelize.col('Memberships.id')), "numMembers"],
+            include:[[sequelize.cast(sequelize.fn("COUNT", sequelize.col('Memberships.id')), 'integer'), "numMembers"],
                     [sequelize.col('GroupImages.imageURL'), 'previewImage']]
         },
         group: ['Group.id', 'GroupImages.imageURL']
     });
+
+
+
     res.status(200).json({groups})
 });
 

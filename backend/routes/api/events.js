@@ -27,8 +27,8 @@ const validateEvent = [
         .withMessage('Name must be at least 5 characters'),
     check('type')
         .exists({checkFalsy: true})
-        .isIn(['Online', 'In person'])
-        .withMessage("Type must be 'Online' or 'In person'"),
+        .isIn(['Online', 'In Person'])
+        .withMessage("Type must be 'Online' or 'In Person'"),
     check('capacity')
         .exists({checkFalsy: true})
         .isInt({min: 0})

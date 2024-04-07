@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
     type: {
       type: DataTypes.STRING,
       validate: {
-        isIn: [['Online', 'In person']]
+        isIn: [['Online', 'In Person']]
       }
     },
 

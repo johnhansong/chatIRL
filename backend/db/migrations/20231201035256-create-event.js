@@ -52,7 +52,7 @@ module.exports = {
       },
       startDate: {
         type: Sequelize.DATE,
-        allowNull:false
+        allowNull:false,
       },
       endDate: {
         type: Sequelize.DATE,

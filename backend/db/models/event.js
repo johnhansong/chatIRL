@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull:false,
       validate: {
-        isIn: [['Online', 'In person']]
+        isIn: [['Online', 'In Person']]
       },
     },
     capacity: {
@@ -68,7 +68,11 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isAfter: new Date(Date.now()).toLocaleString('en-us', {hour12:false})
         .split('/').join('-').split(',').join(' ')
-      }
+      },
+      // get() {
+      //   const dateTime = this.getDataValue
+      //   return dateTime
+      // }
     },
     endDate: {
       type: DataTypes.DATE,
@@ -82,7 +86,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Event',
     defaultScope: {
       attributes: {
-        exclude: ["description", "capacity", "price", "numAttending", ""]
+        exclude: ["description", "capacity", "price", "numAttending"]
       }
     }
   });
