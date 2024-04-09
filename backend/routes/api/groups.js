@@ -124,7 +124,7 @@ router.get(
 
 
 
-    res.status(200).json({groups})
+    res.status(200).json({"Groups": groups})
 });
 
 //Get all Groups joined or organized by the Current User
@@ -362,7 +362,7 @@ router.get(
             },
             group: ['Event.id', 'EventImages.imageURL', 'Group.id', 'Venue.id']
         })
-    res.status(200).json(eventsById)
+    res.status(200).json({"Events": eventsById})
     }
 )
 
@@ -395,7 +395,7 @@ router.post(
             name: newEvent.name,
             type: newEvent.type,
             capacity: newEvent.capacity,
-            price: newEvent.price,
+            price: parseInt(newEvent.price),
             description: newEvent.description,
             startDate: newEvent.startDate,
             endDate: newEvent.endDate
@@ -496,20 +496,18 @@ router.put(
         err.errors = { 'status': 'Cannot change a membership status to pending' }
         return next(err);
     }
-    //Couldn't find a User with the specified memberId
-    let user = await User.findByPk(memberId)
-    if (user == null) {
-        err.errors = { "memberId": "User couldn't be found" }
-        return next(err);
-    }
+    const user = await User.findByPk(memberId)
+
 
     currMembership.set({status})
     currMembership = await currMembership.save()
 
+    console.log(currMembership.memberId)
+
     const safeMember = {
         id: currMembership.id,
         groupId: currMembership.groupId,
-        memberId: currMembership.memberId,
+        memberId: user.id,
         status: currMembership.status
     }
 

@@ -56,15 +56,25 @@ const eventExistsValidation = async (req, _res, next) => {
 //validating if membership exists
 const membershipExistsValidation = async (req, _res, next) => {
     const { memberId } = req.body
-    if (await Membership.findOne({
-        where: {groupId: req.params.groupId, userId: memberId}})) {
-            return next();
-        }
 
-        const err = new Error("Membership between the user and the group does not exist")
-        err.status = 404;
-        err.title = "Membership between the user and the group does not exist"
-        return next(err)
+    const currMember = await Membership.findOne({
+        where: {groupId: req.params.groupId, userId: memberId}})
+
+    //Couldn't find a User with the specified memberId
+    const user = await User.findByPk(memberId)
+
+    if (user == null) {
+        const err = new Error("User couldn't be found")
+        err.title = "User couldn't be found"
+        return next(err);
+    }
+
+    if (currMember) return next();
+
+    const err = new Error("Membership between the user and the group does not exist")
+    err.status = 404;
+    err.title = "Membership between the user and the group does not exist"
+    return next(err)
 }
 
 const deleteMembership = async (req, _res, next) => {
@@ -325,9 +335,8 @@ const isAttending = async (req, _res, next) => {
             where: {    groupId: currGroup.id,
                         userId: req.user.id},
     })
-    if (currMember == null) return next()
 
-    if (currMember.status == 'pending') {
+    if (!currMember || currMember.status == 'pending') {
         const err = new Error('Forbidden');
         err.status = 403;
         err.title = "Forbidden"

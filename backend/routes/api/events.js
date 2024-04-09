@@ -134,7 +134,8 @@ router.get(
                 },
                 {
                     model: Image, as: 'EventImages',
-                    attributes: [],
+                    attributes: ['id', ['imageURL', 'url'], 'preview'],
+
                     where: {
                         imageableType: 'Event',
                         preview: true
@@ -153,8 +154,8 @@ router.get(
             attributes: {
                 include: [[sequelize.cast(sequelize.fn("COUNT", sequelize.col('Attendances.id')), 'integer'), "numAttending"],
                             [sequelize.col("EventImages.imageURL"), 'previewImage'],
-                        'description',
-                        ],
+                        'price', 'capacity', 'description',
+                    ],
                 exclude: ['createdAt', 'updatedAt']
             },
             group: ['Event.id', 'EventImages.imageURL', 'Group.id', 'Venue.id']
@@ -213,7 +214,7 @@ router.put(
             name: currEvent.name,
             type: currEvent.type,
             capacity: currEvent.capacity,
-            price: currEvent.price,
+            price: parseInt(currEvent.price),
             description: currEvent.description,
             startDate: currEvent.startDate,
             endDate: currEvent.endDate
@@ -248,18 +249,18 @@ router.get(
         })
 
         if ((currMember && currMember.status == 'co-host') || req.user.id == currGroup.organizerId) {
-            let attendance = await User.findAll({
+            let attendees = await User.findAll({
                 include: {
                     model: Attendance, as: 'Attendance',
                     attributes: ['status'],
                     where: {
                         eventId: req.params.eventId,
-                        status: ['waitlist', 'pending', 'attending']
-                    }
+                    },
                 },
-                attributes: ['id', 'firstName', 'lastName']
+                attributes: ['id', 'firstName', 'lastName'],
             })
-            res.status(200).json({"Attendees": attendance})
+
+            res.status(200).json({"Attendees": attendees})
         } else {
             let attendance = await User.findAll({
                 include: {
@@ -268,7 +269,7 @@ router.get(
                     where: {
                         eventId: req.params.eventId,
                         status: ['waitlist', 'attending']
-                    }
+                    },
                 },
                 attributes: ['id', 'firstName', 'lastName']
             })
@@ -287,13 +288,6 @@ router.post(
             where: {    groupId: currGroup.id,
                         userId: req.user.id},
         })
-
-        if (currMember == null) {
-            const err = new Error('Forbidden');
-            err.status = 403;
-            err.title = "Forbidden"
-            return next(err)
-        }
 
         let attendance = await Attendance.create({
             eventId: req.params.eventId,

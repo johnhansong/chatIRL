@@ -15,6 +15,9 @@ const validateSignup = [
     check('username')
         .exists({checkFalsy: true})
         .withMessage("Username is required"),
+        check('password')
+        .exists({checkFalsy: true})
+        .withMessage("Password is required"),
     check('firstName')
         .exists({checkFalsy: true})
         .withMessage('First Name is required'),
@@ -35,6 +38,7 @@ router.post(
         const emailExists = await User.findOne({
             where: {email: req.body.email}
         })
+
         if (emailExists) {
             const err = new Error("User already exists")
             err.status = 500;
