@@ -51,43 +51,57 @@ const validatePagination = [
         .withMessage("Page must be greater than or equal to 1"),
     check('size')
         .optional()
-        .isInt({min: 1, max: 20})
-        .withMessage("Size must be between 1 and 20"),
-    check('name')
-        .optional()
-        .isString()
-        .withMessage("Name must be a string"),
-    check('type')
-        .optional()
-        .isIn(['Online', 'In Person'])
-        .withMessage("Type must be 'Online' or 'In Person'"),
-    check('startDate')
-        .optional()
-        .isDate()
-        .withMessage("Start date must be a valid datetime"),
+        .isInt({min: 1})
+        .withMessage("Size must be greater than or equal to 1"),
+    // check('startDate')
+    //     .optional()
+    //     .isDate()
+    //     .withMessage("Start date must be a valid datetime"),
     handleValidationErrors
 ]
 
 //Get all Events
 router.get(
-    '/',
-    validatePagination,
+    '/', validatePagination,
     async (req, res, next) => {
 
     let pagination = {}
     const page = req.query.page === undefined ? 1 : parseInt(req.query.page);
 	const size = req.query.size === undefined ? 20 : parseInt(req.query.size);
-	if (page >= 1 && size >= 1) {
+	if ((page >= 1 && page <= 10) && (size >= 1 && size <= 20)) {
 		pagination.limit = size;
 		pagination.offset = size * (page - 1);
 	}
 
+    let {name, type, startDate} = req.query;
+    let err = new Error("Bad Request");
+    err.status = 400;
+    err.errors = {}
+    if (name && (typeof name != 'string')) {
+        err.errors.name = "Name must be a string"
+        return next(err)
+    } else if (type && (type != 'Online' && type != 'In person')) {
+        err.errors.type = "Type must be 'Online' or 'In Person'";
+        return next(err)
+    } else if (startDate && (new Date(startDate) === 'Invalid Date')) {
+        err.errors.startDate = "Start date must be a valid datetime";
+        return next(err)
+    }
+
+    let where = {}
+    if (name) where.name = name;
+    if (type) where.type = type;
+    if (startDate) where.type = startDate
+
     let events = await Event.findAll({
+        where,
         include: [
             {
                 model: Attendance,
                 attributes: [],
-                where: {status: "attending"},
+                where: {
+                    status: "attending"
+                },
                 required: false
             },
             {
@@ -116,7 +130,15 @@ router.get(
         group: ['Event.id', 'EventImages.imageURL', 'Group.id', 'Venue.id'],
     });
 
-    res.status(200).json({"Events": events.splice(pagination.offset, pagination.limit)})
+    const formatDate = events.map(event => ({
+        ...event.toJSON(),
+        startDate: event.startDate.toISOString().replace('T', ' ').slice(0, 19),
+        endDate: event.endDate.toISOString().replace('T', ' ').slice(0, 19)
+    }));
+
+    res.status(200).json({"Events": formatDate.splice(pagination.offset, pagination.limit),
+                            "page": page,
+                            "size": size})
 });
 
 //Get details of an Event specified by its id
@@ -135,7 +157,6 @@ router.get(
                 {
                     model: Image, as: 'EventImages',
                     attributes: ['id', ['imageURL', 'url'], 'preview'],
-
                     where: {
                         imageableType: 'Event',
                         preview: true
@@ -158,9 +179,16 @@ router.get(
                     ],
                 exclude: ['createdAt', 'updatedAt']
             },
-            group: ['Event.id', 'EventImages.imageURL', 'Group.id', 'Venue.id']
+            group: ['Event.id', 'EventImages.id', 'EventImages.imageURL', 'Group.id', 'Venue.id']
         })
-    res.status(200).json(eventDetails)
+
+    const formatDate = {
+        ...eventDetails.toJSON(),
+        startDate: eventDetails.startDate.toISOString().replace('T', ' ').slice(0, 19),
+        endDate: eventDetails.endDate.toISOString().replace('T', ' ').slice(0, 19)
+    }
+
+    res.status(200).json(formatDate)
     }
 )
 
@@ -216,8 +244,8 @@ router.put(
             capacity: currEvent.capacity,
             price: parseInt(currEvent.price),
             description: currEvent.description,
-            startDate: currEvent.startDate,
-            endDate: currEvent.endDate
+            startDate: currEvent.startDate.toISOString().replace('T', ' ').slice(0, 19),
+            endDate: currEvent.endDate.toISOString().replace('T', ' ').slice(0, 19)
         }
         res.status(200).json(safeEvent);
     }
@@ -257,10 +285,20 @@ router.get(
                         eventId: req.params.eventId,
                     },
                 },
-                attributes: ['id', 'firstName', 'lastName'],
+                attributes: ['id', 'firstName', 'lastName',],
             })
 
-            res.status(200).json({"Attendees": attendees})
+            const formatResult = attendees.map(attendee => ({
+                id: attendee.id,
+                firstName: attendee.firstName,
+                lastName: attendee.lastName,
+                Attendance: {
+                    status: attendee.Attendance[0].status
+                }
+            }))
+
+            res.status(200).json({"Attendees": formatResult})
+
         } else {
             let attendance = await User.findAll({
                 include: {
@@ -273,7 +311,15 @@ router.get(
                 },
                 attributes: ['id', 'firstName', 'lastName']
             })
-            res.status(200).json({"Attendees": attendance})
+            const formatResult = attendees.map(attendee => ({
+                id: attendee.id,
+                firstName: attendee.firstName,
+                lastName: attendee.lastName,
+                Attendance: {
+                    status: attendee.Attendance[0].status
+                }
+            }))
+            res.status(200).json({"Attendees": formatResult})
         }
 });
 

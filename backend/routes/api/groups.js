@@ -117,14 +117,19 @@ router.get(
         ],
         attributes: {
             include:[[sequelize.cast(sequelize.fn("COUNT", sequelize.col('Memberships.id')), 'integer'), "numMembers"],
-                    [sequelize.col('GroupImages.imageURL'), 'previewImage']]
+                    [sequelize.col('GroupImages.imageURL'), 'previewImage'],
+                    ]
         },
         group: ['Group.id', 'GroupImages.imageURL']
     });
 
+    const formatDate = groups.map(group => ({
+        ...group.toJSON(),
+        createdAt: group.createdAt.toISOString().replace('T', ' ').slice(0, 19),
+        updatedAt: group.updatedAt.toISOString().replace('T', ' ').slice(0, 19)
+    }));
 
-
-    res.status(200).json({"Groups": groups})
+    res.status(200).json({"Groups": formatDate})
 });
 
 //Get all Groups joined or organized by the Current User
@@ -164,7 +169,13 @@ router.get(
         return next(err)
     }
 
-    res.status(200).json({"Groups": currGroups})
+    const formatDate = currGroups.map(group => ({
+        ...group.toJSON(),
+        createdAt: group.createdAt.toISOString().replace('T', ' ').slice(0, 19),
+        updatedAt: group.updatedAt.toISOString().replace('T', ' ').slice(0, 19)
+    }));
+
+    res.status(200).json({"Groups": formatDate})
 });
 
 
@@ -204,7 +215,14 @@ router.get(
         group: ['Group.id', 'GroupImages.id',
                 'Venues.id', 'Organizer.id']
     })
-    res.status(200).json(groupDetails)
+
+    const formattedGroup = {
+        ...groupDetails.toJSON(),
+        createdAt: groupDetails.createdAt.toISOString().replace('T', ' ').slice(0, 19),
+        updatedAt: groupDetails.updatedAt.toISOString().replace('T', ' ').slice(0, 19),
+    };
+
+    res.status(200).json(formattedGroup)
 })
 
 //Create a Group
@@ -223,7 +241,13 @@ router.post(
         status: "co-host"
     })
 
-    res.status(201).json(group)
+    const formattedGroup = {
+        ...group.toJSON(),
+        createdAt: group.createdAt.toISOString().replace('T', ' ').slice(0, 19),
+        updatedAt: group.updatedAt.toISOString().replace('T', ' ').slice(0, 19),
+    };
+
+    res.status(201).json(formattedGroup)
 });
 
 // Add an Image to a Group based on the Group's id
@@ -267,7 +291,13 @@ router.put(
         // save the changes to the database
         currGroup = await currGroup.save();
 
-        res.status(200).json(currGroup)
+        const formattedGroup = {
+            ...currGroup.toJSON(),
+            createdAt: currGroup.createdAt.toISOString().replace('T', ' ').slice(0, 19),
+            updatedAt: currGroup.updatedAt.toISOString().replace('T', ' ').slice(0, 19),
+        };
+
+        res.status(200).json(formattedGroup)
     }
 )
 
@@ -362,7 +392,14 @@ router.get(
             },
             group: ['Event.id', 'EventImages.imageURL', 'Group.id', 'Venue.id']
         })
-    res.status(200).json({"Events": eventsById})
+
+    const formatDate = eventsById.map(event => ({
+        ...event.toJSON(),
+        startDate: event.startDate.toISOString().replace('T', ' ').slice(0, 19),
+        endDate: event.endDate.toISOString().replace('T', ' ').slice(0, 19)
+    }));
+
+    res.status(200).json({"Events": formatDate})
     }
 )
 
@@ -397,8 +434,8 @@ router.post(
             capacity: newEvent.capacity,
             price: parseInt(newEvent.price),
             description: newEvent.description,
-            startDate: newEvent.startDate,
-            endDate: newEvent.endDate
+            startDate: newEvent.startDate.toISOString().replace('T', ' ').slice(0, 19),
+            endDate: newEvent.endDate.toISOString().replace('T', ' ').slice(0, 19)
         }
         res.status(200).json(safeEvent)
     }
