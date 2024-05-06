@@ -43,7 +43,7 @@ const validateEvent = [
     handleValidationErrors
 ]
 
-const validatePagination = [
+const validateQuery = [
     check('page')
         .optional()
         .isInt({min: 1})
@@ -69,8 +69,10 @@ const validatePagination = [
 
 //Get all Events
 router.get(
-    '/', validatePagination,
+    '/', validateQuery,
     async (req, res, next) => {
+
+    console.log('%%HERE%%', typeof req.query.name)
 
     let pagination = {}
     const page = req.query.page === undefined ? 1 : parseInt(req.query.page);
