@@ -61,7 +61,7 @@ const validateEvent = [
 
 //Get all Events
 router.get(
-    '/', validatePagination,
+    '/',
     async (req, res, next) => {
 
     let pagination = {}
