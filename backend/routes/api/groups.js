@@ -35,8 +35,8 @@ const validateGroup = [
         .withMessage("About must be 50 characters or more"),
     check('type')
         .exists({checkFalsy: true})
-        .isIn(['Online', 'In Person'])
-        .withMessage("Type must be 'Online' or 'In Person'"),
+        .isIn(['Online', 'In person'])
+        .withMessage("Type must be 'Online' or 'In person'"),
     check('private')
         .exists({checkFalsy: false})
         .isBoolean()
@@ -57,8 +57,8 @@ const validateEvent = [
         .withMessage('Name must be at least 5 characters'),
     check('type')
         .exists({checkFalsy: true})
-        .isIn(['Online', 'In Person'])
-        .withMessage("Type must be Online or In Person"),
+        .isIn(['Online', 'In person'])
+        .withMessage("Type must be Online or In person"),
     check('capacity')
         .exists({checkFalsy: true})
         .isInt({min: 0})

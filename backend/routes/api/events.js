@@ -13,7 +13,6 @@ const {
     handleValidationErrors,
     venueExistsValidation,
     eventExistsValidation,
-    isAttendeeValidation,
     validateDates,
     isOrgOrHostEvent,
     isPartOfEvent,
@@ -27,8 +26,8 @@ const validateEvent = [
         .withMessage('Name must be at least 5 characters'),
     check('type')
         .exists({checkFalsy: true})
-        .isIn(['Online', 'In Person'])
-        .withMessage("Type must be 'Online' or 'In Person'"),
+        .isIn(['Online', 'In person'])
+        .withMessage("Type must be 'Online' or ''"),
     check('capacity')
         .exists({checkFalsy: true})
         .isInt({min: 0})
@@ -44,21 +43,21 @@ const validateEvent = [
     handleValidationErrors
 ]
 
-const validatePagination = [
-    check('page')
-        .optional()
-        .isInt({min: 1})
-        .withMessage("Page must be greater than or equal to 1"),
-    check('size')
-        .optional()
-        .isInt({min: 1})
-        .withMessage("Size must be greater than or equal to 1"),
-    // check('startDate')
-    //     .optional()
-    //     .isDate()
-    //     .withMessage("Start date must be a valid datetime"),
-    handleValidationErrors
-]
+// const validatePagination = [
+//     check('page')
+//         .optional()
+//         .isInt({min: 1})
+//         .withMessage("Page must be greater than or equal to 1"),
+//     check('size')
+//         .optional()
+//         .isInt({min: 1})
+//         .withMessage("Size must be greater than or equal to 1"),
+//     check('startDate')
+//         .optional()
+//         .isDate()
+//         .withMessage("Start date must be a valid datetime"),
+//     handleValidationErrors
+// ]
 
 //Get all Events
 router.get(
@@ -77,11 +76,17 @@ router.get(
     let err = new Error("Bad Request");
     err.status = 400;
     err.errors = {}
-    if (name && (typeof name != 'string')) {
+    if (page && (page < 1)) {
+        err.errors.page = "Page must be greater than or equal to 1"
+        return next(err)
+    } else if (size < 1 || size > 20 ) {
+        err.errors.size = "Size must be between 1 and 20"
+        return next(err)
+    } else if (name && (typeof name != 'string')) {
         err.errors.name = "Name must be a string"
         return next(err)
     } else if (type && (type != 'Online' && type != 'In person')) {
-        err.errors.type = "Type must be 'Online' or 'In Person'";
+        err.errors.type = "Type must be 'Online' or 'In person'";
         return next(err)
     } else if (startDate && (new Date(startDate) === 'Invalid Date')) {
         err.errors.startDate = "Start date must be a valid datetime";
