@@ -43,25 +43,33 @@ const validateEvent = [
     handleValidationErrors
 ]
 
-// const validatePagination = [
-//     check('page')
-//         .optional()
-//         .isInt({min: 1})
-//         .withMessage("Page must be greater than or equal to 1"),
-//     check('size')
-//         .optional()
-//         .isInt({min: 1})
-//         .withMessage("Size must be greater than or equal to 1"),
-//     check('startDate')
-//         .optional()
-//         .isDate()
-//         .withMessage("Start date must be a valid datetime"),
-//     handleValidationErrors
-// ]
+const validatePagination = [
+    check('page')
+        .optional()
+        .isInt({min: 1})
+        .withMessage("Page must be greater than or equal to 1"),
+    check('size')
+        .optional()
+        .isInt({min: 1})
+        .withMessage("Size must be between 1 and 20"),
+    check ('name')
+        .optional()
+        .isString()
+        .withMessage("Name must be a string"),
+    check('type')
+        .optional()
+        .isIn(["Online", "In person"])
+        .withMessage("Type must be 'Online' or 'In person'"),
+    check('startDate')
+        .optional()
+        .isDate()
+        .withMessage("Start date must be a valid datetime"),
+    handleValidationErrors
+]
 
 //Get all Events
 router.get(
-    '/',
+    '/', validatePagination,
     async (req, res, next) => {
 
     let pagination = {}
@@ -73,25 +81,25 @@ router.get(
 	}
 
     let {name, type, startDate} = req.query;
-    let err = new Error("Bad Request");
-    err.status = 400;
-    err.errors = {}
-    if (page && (page < 1)) {
-        err.errors.page = "Page must be greater than or equal to 1"
-        return next(err)
-    } else if (size < 1 || size > 20 ) {
-        err.errors.size = "Size must be between 1 and 20"
-        return next(err)
-    } else if (name && (typeof name != 'string')) {
-        err.errors.name = "Name must be a string"
-        return next(err)
-    } else if (type && (type != 'Online' && type != 'In person')) {
-        err.errors.type = "Type must be 'Online' or 'In person'";
-        return next(err)
-    } else if (startDate && (new Date(startDate) === 'Invalid Date')) {
-        err.errors.startDate = "Start date must be a valid datetime";
-        return next(err)
-    }
+    // let err = new Error("Bad Request");
+    // err.status = 400;
+    // err.errors = {}
+    // if (page && (page < 1)) {
+    //     err.errors.page = "Page must be greater than or equal to 1"
+    //     return next(err)
+    // } else if (size < 1 || size > 20 ) {
+    //     err.errors.size = "Size must be between 1 and 20"
+    //     return next(err)
+    // } else if (name && (typeof name != 'string')) {
+    //     err.errors.name = "Name must be a string"
+    //     return next(err)
+    // } else if (type && (type != 'Online' && type != 'In person')) {
+    //     err.errors.type = "Type must be 'Online' or 'In person'";
+    //     return next(err)
+    // } else if (startDate && (new Date(startDate) == 'Invalid Date')) {
+    //     err.errors.startDate = "Start date must be a valid datetime";
+    //     return next(err)
+    // }
 
     let where = {}
     if (name) where.name = name;
