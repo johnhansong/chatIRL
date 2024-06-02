@@ -72,8 +72,6 @@ router.get(
     '/', validateQuery,
     async (req, res, next) => {
 
-    console.log('%%HERE%%', typeof req.query.name)
-
     let pagination = {}
     const page = req.query.page === undefined ? 1 : parseInt(req.query.page);
 	const size = req.query.size === undefined ? 20 : parseInt(req.query.size);

@@ -539,7 +539,6 @@ router.put(
     currMembership.set({status})
     currMembership = await currMembership.save()
 
-    console.log(currMembership.memberId)
 
     const safeMember = {
         id: currMembership.id,

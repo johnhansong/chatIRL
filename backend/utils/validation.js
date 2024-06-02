@@ -308,8 +308,6 @@ const changeStatusAuth = async (req, _res, next) => {
                 userId: req.user.id}
     })
 
-    console.log(currMember)
-
     if (currMember && (currMember.userId == currGroup.organizerId)) return next()
     if (status == 'pending') return next()
     if (status == 'member' && currMember &&
