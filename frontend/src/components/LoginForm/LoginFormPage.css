@@ -1,0 +1,13 @@
+html {
+    font-family: sans-serif
+}
+
+label {
+    display: flex;
+    align-items: center;
+    margin: 5px;
+}
+
+.errors {
+    color: red;
+}
