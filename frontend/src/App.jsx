@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import SignupFormPage from "./components/SignupForm/SignupFormPage";
-import LoginFormPage from "./components/LoginForm/LoginFormPage";
+import LoginFormPage from "./components/LoginFormModal/LoginFormModal";
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import Navigation from "./components/Navigation/Navigation";
