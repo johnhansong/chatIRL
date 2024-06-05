@@ -6,31 +6,35 @@ const LandingPage = () => {
 
     return (
     <>
-        <div id='landingPage-block-1'>
-            <div id='landingPage-text'>
-                <h1 id='landingPage-header'>
+        <div className='landingPage-block-1'>
+            <div id='block-1-text'>
+                <h1>
                     The people platform- Where interests become friendships
                 </h1>
-                <p id='landingPage-paragraph'>
+                <p>
                     Whatever your interest, from hiking and reading to
                     networking and skill sharing, there are thousands
                     of people who share it on ChatIRL. Events are happening
                     every day— get off your phone and sign up to join the fun.
                 </p>
             </div>
-            <div id='landingPage-img'>
-                <img src='https://secure.meetupstatic.com/next/images/shared/online_events.svg?w=640'/>
+            <div>
+                <img
+                    id='block-1-img'
+                    src='https://secure.meetupstatic.com/next/images/shared/online_events.svg?w=640'
+                />
             </div>
         </div>
-        <div id='landingPage-block-2'>
-            <h2>How ChatIRL works</h2>
-            <p>
+        <div className='landingPage-block-2'>
+            <h2 id='block-2-header'>How ChatIRL works</h2>
+            <p id='block-2-text'>
                 Discover events and groups: See who's hosting local
                 events for all the things you love.
                 Start a group to host events: Create your
-                own ChatIRL group, and draw from a community of tens</p>
+                own ChatIRL group, and draw from a community of tens
+            </p>
         </div>
-        <div id='landingPage-block-3'>
+        <div className='landingPage-block-3'>
             <div id='seeGroups'>
                 <img src='https://secure.meetupstatic.com/next/images/shared/handsUp.svg?w=256'/>
                 <h3>See all groups</h3>
@@ -56,7 +60,7 @@ const LandingPage = () => {
                 </p>
             </div>
         </div>
-        <div id='joinButton'>
+        <div className='join-button'>
             <OpenModalButton
                 buttonText="Join Meetup"
                 modalComponent={ <SignupFormModal/> }

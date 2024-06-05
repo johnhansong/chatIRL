@@ -29,8 +29,19 @@ ul {
     color:rgba(229, 25, 55);
 }
 
-#signInUp {
+.signInUp {
     display: flex;
     padding: 10px
+}
 
+.signInUp > button {
+    font-size: 1.05rem;
+    color: rgba(0, 0, 0, 0.771);
+    background-color: transparent;
+    border: none;
+}
+
+button:hover {
+    color: teal;
+    cursor: grab;
 }
