@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import * as sessionActions from '../../store/session';
-import { useDispatch, useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
-import './SignupFormPage.css'
+import { useDispatch } from 'react-redux';
+import { useModal } from '../../context/Modal'
+import './SignupForm.css'
 
-function SignupFormPage() {
+function SignupFormModal() {
     const dispatch = useDispatch();
-    const sessionUser = useSelector((state) => state.session.user);
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -14,6 +13,7 @@ function SignupFormPage() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errors, setErrors] = useState({});
+    const { closeModal } = useModal();
 
     const handleEmail = (e) => {setEmail(e.target.value)}
     const handleUsername = (e) => {setUsername(e.target.value)}
@@ -22,7 +22,7 @@ function SignupFormPage() {
     const handlePassword = (e) => {setPassword(e.target.value)}
     const handleConfirmPassword = (e) => {setConfirmPassword(e.target.value)}
 
-    if (sessionUser) return <Navigate to="/" replace={true} />;
+    // if (sessionUser) return <Navigate to="/" replace={true} />;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -32,7 +32,9 @@ function SignupFormPage() {
                 sessionActions.signup({
                     email, username, firstName, lastName, password
                 })
-            ).catch(async (res) => {
+            )
+            .then(closeModal)
+            .catch(async (res) => {
                 const data = await res.json();
                 if (data?.errors) {
                     setErrors(data.errors);
@@ -40,7 +42,7 @@ function SignupFormPage() {
             });
         }
         return setErrors({
-            confirmPassword: "Password fields should match"
+            confirmPassword: "Password fields must match"
         });
     };
 
@@ -50,37 +52,37 @@ function SignupFormPage() {
             <form onSubmit={handleSubmit}>
                 <label>
                     Email
-                    <input type="text" value={email} onChange={handleEmail}/>
+                    <input type="text" value={email} onChange={handleEmail} required/>
                 </label>
                 {errors.email && <p>{errors.email}</p>}
 
                 <label>
                     UserName
-                    <input type="text" value={username} onChange={handleUsername} />
+                    <input type="text" value={username} onChange={handleUsername} required/>
                 </label>
                 {errors.userName && <p>{errors.userName}</p>}
 
                 <label>
                     First Name
-                    <input type="text" value={firstName} onChange={handleFirstName} />
+                    <input type="text" value={firstName} onChange={handleFirstName} required/>
                 </label>
                 {errors.firstName && <p>{errors.firstName}</p>}
 
                 <label>
                     Last Name
-                    <input type="text" value={lastName} onChange={handleLastName} />
+                    <input type="text" value={lastName} onChange={handleLastName} required/>
                 </label>
                 {errors.lastName && <p>{errors.lastName}</p>}
 
                 <label>
                     Password
-                    <input type="password" value={password} onChange={handlePassword} />
+                    <input type="password" value={password} onChange={handlePassword} required/>
                 </label>
                 {errors.password && <p>{errors.password}</p>}
 
                 <label>
                     Confirm Password
-                    <input type="password" value={confirmPassword} onChange={handleConfirmPassword} />
+                    <input type="password" value={confirmPassword} onChange={handleConfirmPassword} required/>
                 </label>
                 {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
 
@@ -90,4 +92,4 @@ function SignupFormPage() {
     );
 }
 
-export default SignupFormPage;
+export default SignupFormModal;

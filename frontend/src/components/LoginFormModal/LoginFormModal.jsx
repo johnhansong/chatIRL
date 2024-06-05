@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as sessionActions from '../../store/session';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import './LoginForm.css'
 
@@ -14,7 +14,7 @@ function LoginFormModal() {
     const handleCredential = (e) => {setCredential(e.target.value)}
     const handlePassword = (e) => {setPassword(e.target.value)}
 
-    if (sessionUser) return <Navigate to="/" replace={true} />
+    // if (sessionUser) return <Navigate to="/" replace={true} />
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -57,4 +57,4 @@ function LoginFormModal() {
     );
 }
 
-export default LoginFormPage;
+export default LoginFormModal;
