@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import Navigation from "./components/Navigation/Navigation";
 import LandingPage from "./components/LandingPage";
+import ListPage from "./components/ListPage/ListPage";
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -31,6 +32,14 @@ const router = createBrowserRouter([
         path: '/',
         element: <LandingPage />
       },
+      {
+        path: '/groups',
+        element: <ListPage toggle={'Groups'}/>
+      },
+      {
+        path: '/events',
+        element: <ListPage toggle={'Events'} />
+      }
     ]
   }
 ]);
