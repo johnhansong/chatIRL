@@ -17,9 +17,9 @@ export const GroupDetailsPage = () => {
         dispatch(fetchOneGroup(groupId))
     }, [dispatch])
 
-    const group = useSelector((state) => {
-        if (groupId == state.groups)
-    })
+    // const group = useSelector((state) => {
+    //     if (groupId == state.groups)
+    // })
 
     return (
     <div> GROUPS/ID
