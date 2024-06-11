@@ -1,8 +1,13 @@
-import './LandingPage.css';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { NavLink, useNavigate } from 'react-router-dom';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import SignupFormModal from '../SignupFormModal/SignupFormModal';
+import './LandingPage.css';
 
 const LandingPage = () => {
+    const currUser = useSelector((state) => state.session.user);
+    const navigate = useNavigate()
 
     return (
     <>
@@ -34,10 +39,11 @@ const LandingPage = () => {
                 own ChatIRL group, and draw from a community of tens
             </p>
         </div>
+
         <div className='landingPage-block-3'>
-            <div id='seeGroups'>
+            <div id='seeGroups' >
                 <img src='https://secure.meetupstatic.com/next/images/shared/handsUp.svg?w=256'/>
-                <h3>See all groups</h3>
+                <NavLink to='/groups' className='block-3-link'> See all groups </NavLink>
                 <p>
                     Do what you love, meet others who love it,
                     find your community. The rest is history!
@@ -45,7 +51,7 @@ const LandingPage = () => {
             </div>
             <div id='findEvent'>
                 <img src='https://secure.meetupstatic.com/next/images/shared/ticket.svg?w=256'/>
-                <h3>Find an Event</h3>
+                <NavLink to='/events' className='block-3-link'>Find an Event</NavLink>
                 <p>
                     Events are happening on just about any topic you can think of,
                     from online gaming and photography to yoga and hiking.
@@ -53,19 +59,37 @@ const LandingPage = () => {
             </div>
             <div id='startGroup'>
                 <img src='https://secure.meetupstatic.com/next/images/shared/joinGroup.svg?w=256'/>
-                <h3>Start a new group</h3>
+
+                {currUser && <NavLink to='/groups' className='block-3-link'>Start a new group</NavLink>}
+
+                <div className='block-3-link'>
+                    {!currUser && <OpenModalButton
+                                    buttonText="Start a new group"
+                                    modalComponent={ <SignupFormModal /> }
+                                ></OpenModalButton>
+                    }
+                </div>
+
                 <p>
                     You don&apos;t have to be an expert to gather people together
                     and explore shared interests.
                 </p>
             </div>
         </div>
+
         <div className='join-button'>
-            <OpenModalButton
-                buttonText="Join Meetup"
-                modalComponent={ <SignupFormModal/> }
-            >
-            </OpenModalButton>
+            {!currUser ?
+                <OpenModalButton
+                    buttonText="Join Meetup"
+                    modalComponent={ <SignupFormModal/> }
+                ></OpenModalButton>
+            :
+                <button
+                    type="button"
+                    onClick={() => navigate("/groups")}
+                >Join a Group!</button>
+            }
+
         </div>
     </>
     )

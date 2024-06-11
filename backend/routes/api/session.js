@@ -39,10 +39,11 @@ router.post(
     });
 
     if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
-        const err = new Error('Invalid credentials');
-        err.status = 401;
-        err.title = 'Invalid credentials';
-        return next(err);
+        const error = new Error('Invalid credentials');
+        error.status = 401;
+        error.title = 'Invalid credentials';
+        error.errors = {'credential': 'The provided credentials were invalid'}
+        return next(error);
     }
 
     const safeUser = {
@@ -88,9 +89,6 @@ router.get(
         });
     } else return res.json({ user: null });
 });
-
-
-
 
 
 module.exports = router;

@@ -15,7 +15,7 @@ const formatDate = (dateTime) => {
         time = hour + ":" + minute + "AM"
     }
 
-    return monthDay + '/' + year + " " + time
+    return monthDay + '/' + year + " · " + time
 }
 
 export { formatDate }
