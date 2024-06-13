@@ -1,3 +1,3 @@
-import { GroupDetailsPage } from "./GroupDetailsPage";
+import GroupDetailsPage from "./GroupDetailsPage";
 
 export default GroupDetailsPage

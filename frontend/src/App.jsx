@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Navigation from "./components/Navigation/Navigation";
 import LandingPage from "./components/LandingPage";
 import ListPage from "./components/ListPage/ListPage";
+import GroupDetailsPage from "./components/GroupDetailsPage/";
+import EventDetailsPage from "./components/EventDetailsPage/EventDetailsPage";
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -39,6 +41,14 @@ const router = createBrowserRouter([
       {
         path: '/events',
         element: <ListPage toggle={'Events'} />
+      },
+      {
+        path:'/groups/:groupId',
+        element: <GroupDetailsPage />
+      },
+      {
+        path: '/events/:eventId',
+        element: <EventDetailsPage />
       }
     ]
   }

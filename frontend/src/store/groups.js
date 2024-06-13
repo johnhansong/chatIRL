@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 //action types
 const GET_GROUPS = "groups/getGroups"
 const GET_ONE_GROUP = "groups/getOneGroup"
+const GET_GROUP_EVENTS = "groups/getGroupEvents"
 
 const loadGroups = (groups) => {
     return {
@@ -14,7 +15,14 @@ const loadGroups = (groups) => {
 const loadOneGroup = (group) => {
     return {
         type: GET_ONE_GROUP,
-        group
+        payload: group
+    }
+}
+
+const loadGroupEvents = (group) => {
+    return {
+        type: GET_GROUP_EVENTS,
+        payload: group
     }
 }
 
@@ -31,20 +39,34 @@ export const fetchGroups = () => async dispatch => {
 };
 
 export const fetchOneGroup = (groupId) => async dispatch => {
-    const response = csrfFetch(`/api/groups/${groupId}`)
+    const response = await csrfFetch(`/api/groups/${groupId}`)
     if (response.ok) {
         const group = await response.json();
         dispatch(loadOneGroup(group));
     }
 };
 
+export const fetchGroupEvents = (groupId) => async dispatch => {
+    const response = await csrfFetch(`/api/groups/${groupId}/events`)
 
+    if (response.ok) {
+        const groupEvents = await response.json()
+        dispatch(loadGroupEvents(groupEvents))
+    }
+}
 
-let initialState = {allGroups: {}, oneGroup: {}};
+//store
+let initialState = {allGroups: {}, oneGroup: {}, events: {}};
 const groupReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_GROUPS:
             return {...state, allGroups:{...action.payload}}
+
+        case GET_ONE_GROUP:
+            return {...state, oneGroup: {...action.payload}}
+
+        case GET_GROUP_EVENTS:
+            return {...state, events: {...action.payload}}
 
         default: return state;
     }

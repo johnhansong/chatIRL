@@ -1,2 +1,31 @@
+.group-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: 15rem;
+    margin-right: 15rem;
+}
 
+.group-block-1 {
+    display: flex;
+    flex-direction: row;
+}
 
+#back-btn {
+    color: teal;
+    font-size: 16px;
+}
+
+#group-details-img {
+    width: 550px;
+    height: 375px;
+    border: 2px solid black;
+    margin-right: 3%;
+}
+
+.join-group-btn > button {
+    background-color: red;
+    color: white;
+    justify-self: end;
+}

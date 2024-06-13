@@ -18,4 +18,10 @@ const formatDate = (dateTime) => {
     return monthDay + '/' + year + " · " + time
 }
 
-export { formatDate }
+
+const sortByDate = (array) => {
+    let sorter = (a, b) => Date.parse(a.startDate) - Date.parse(b.startDate)
+    return array.sort(sorter)
+}
+
+export { formatDate, sortByDate }
