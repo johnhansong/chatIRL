@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
@@ -33,7 +33,7 @@ const LandingPage = () => {
         <div className='landingPage-block-2'>
             <h2 id='block-2-header'>How ChatIRL works</h2>
             <p id='block-2-text'>
-                Discover events and groups: See who's hosting local
+                Discover events and groups: See who&apos;s hosting local
                 events for all the things you love.
                 Start a group to host events: Create your
                 own ChatIRL group, and draw from a community of tens
@@ -60,7 +60,7 @@ const LandingPage = () => {
             <div id='startGroup'>
                 <img src='https://secure.meetupstatic.com/next/images/shared/joinGroup.svg?w=256'/>
 
-                {currUser && <NavLink to='/groups' className='block-3-link'>Start a new group</NavLink>}
+                {currUser && <NavLink to='/groups/create' className='block-3-link'>Start a new group</NavLink>}
 
                 <div className='block-3-link'>
                     {!currUser && <OpenModalButton

@@ -6,6 +6,7 @@ import LandingPage from "./components/LandingPage";
 import ListPage from "./components/ListPage/ListPage";
 import GroupDetailsPage from "./components/GroupDetailsPage/";
 import EventDetailsPage from "./components/EventDetailsPage/EventDetailsPage";
+import CreateGroupPage from "./components/CreateGroupPage";
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -43,13 +44,18 @@ const router = createBrowserRouter([
         element: <ListPage toggle={'Events'} />
       },
       {
-        path:'/groups/:groupId',
+        path: '/groups/:groupId',
         element: <GroupDetailsPage />
       },
       {
         path: '/events/:eventId',
         element: <EventDetailsPage />
-      }
+      },
+      {
+        path: '/groups/create',
+        element: <CreateGroupPage />
+      },
+
     ]
   }
 ]);

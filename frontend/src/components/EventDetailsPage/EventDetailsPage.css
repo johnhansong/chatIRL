@@ -1,0 +1,30 @@
+.event-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+.event-boxes {
+    display: flex;
+    flex-direction: row;
+}
+
+.event-detail-boxes {
+    display: flex;
+    flex-direction: column;
+}
+
+.event-group-details:hover {
+    cursor: pointer;
+}
+
+.event-group-details {
+    display: flex;
+    flex-direction: row;
+}
+
+.event-details-box {
+    display: flex;
+    flex-direction: row;
+}

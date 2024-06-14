@@ -4,6 +4,7 @@ import { csrfFetch } from "./csrf";
 const GET_GROUPS = "groups/getGroups"
 const GET_ONE_GROUP = "groups/getOneGroup"
 const GET_GROUP_EVENTS = "groups/getGroupEvents"
+const CREATE_GROUP = "groups/createGroup"
 
 const loadGroups = (groups) => {
     return {
@@ -22,6 +23,13 @@ const loadOneGroup = (group) => {
 const loadGroupEvents = (group) => {
     return {
         type: GET_GROUP_EVENTS,
+        payload: group
+    }
+}
+
+const createGroup = (group) => {
+    return {
+        type: CREATE_GROUP,
         payload: group
     }
 }
@@ -55,6 +63,21 @@ export const fetchGroupEvents = (groupId) => async dispatch => {
     }
 }
 
+export const postGroup = (group) => async dispatch => {
+    const response = await csrfFetch(`/api/groups`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(group)
+    })
+
+    if (response.ok) {
+        const newGroup = await response.json();
+        dispatch(createGroup(newGroup))
+    }
+}
+
 //store
 let initialState = {allGroups: {}, oneGroup: {}, events: {}};
 const groupReducer = (state = initialState, action) => {
@@ -67,6 +90,9 @@ const groupReducer = (state = initialState, action) => {
 
         case GET_GROUP_EVENTS:
             return {...state, events: {...action.payload}}
+
+        case CREATE_GROUP:
+            return {...state, oneGroup: {...action.payload}}
 
         default: return state;
     }

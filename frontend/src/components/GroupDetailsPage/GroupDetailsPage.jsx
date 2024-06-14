@@ -54,7 +54,7 @@ const GroupDetailsPage = () => {
         dispatch(fetchOneGroup(groupId))
     }, [dispatch, groupId])
 
-    return (Object.keys(group).length &&
+    return (Object.keys(group).length && groupEvents &&
     <div className='group-details-wrapper'>
             <NavLink id='back-btn' to="/groups">← Groups </NavLink>
         <div className="group-block-1">
@@ -104,7 +104,7 @@ const GroupDetailsPage = () => {
                             {Object.values(futureEvents).map(event => (
                                 <div key={event.id} id='group-event-item'
                                 onClick={() => navigate(`/events/${event.id}`)}>
-                                <div>
+                                <div className="event-item">
                                     <img
                                         src={
                                             event.previewImage ? event.previewImage :
