@@ -38,7 +38,10 @@ function Navigation({ isLoaded }) {
                     <span id='app-title'>ChatIRL</span>
                 </NavLink>
             </li>
-            {isLoaded && sessionLinks}
+            <div className='profile'>
+                {sessionUser && <NavLink to="/groups/create" className="new"> Start a new group</NavLink>}
+                {isLoaded && sessionLinks}
+            </div>
         </ul>
     );
 }

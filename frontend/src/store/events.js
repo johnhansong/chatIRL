@@ -1,8 +1,10 @@
 import { csrfFetch } from "./csrf"
 
 //action types
-const GET_EVENTS = "events/getEvents"
-const GET_ONE_EVENT = "events/getOneEvent"
+const GET_EVENTS = "events/GET_EVENTS"
+const GET_ONE_EVENT = "events/GET_ONE_EVENT"
+const GET_EVENT_DESCRIPTION = "events/GET_EVENT_DESCRIPTION"
+const ADD_EVENT = "events/ADD_EVENT"
 
 
 const loadEvents = (events) => {
@@ -15,6 +17,13 @@ const loadEvents = (events) => {
 const loadOneEvent = (event) => {
     return {
         type: GET_ONE_EVENT,
+        payload: event
+    }
+}
+
+const loadEventDetail = (event) => {
+    return {
+        type: GET_EVENT_DESCRIPTION,
         payload: event
     }
 }
@@ -41,9 +50,19 @@ export const fetchOneEvent = (eventId) => async dispatch => {
     }
 }
 
+export const fetchEventDetails = (eventId) => async dispatch => {
+    const response = await csrfFetch(`/api/events/${eventId}`)
+
+    if (response.ok) {
+        const event = await response.json()
+        dispatch(loadEventDetail(event))
+        return event
+    }
+}
+
 
 //reducer
-let initialState = { allEvents: {}, oneEvent: {} }
+let initialState = { allEvents: {}, oneEvent: {}, eventDetails: [] }
 const eventReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_EVENTS:
@@ -51,6 +70,9 @@ const eventReducer = (state = initialState, action) => {
 
         case GET_ONE_EVENT:
             return {...state, oneEvent: {...action.payload}}
+
+        case GET_EVENT_DESCRIPTION:
+            return {...state, eventDetails: [...state.eventDetails, action.payload]}
 
         default: return state;
     }

@@ -1,10 +1,12 @@
 import { csrfFetch } from "./csrf";
 
 //action types
-const GET_GROUPS = "groups/getGroups"
-const GET_ONE_GROUP = "groups/getOneGroup"
-const GET_GROUP_EVENTS = "groups/getGroupEvents"
-const CREATE_GROUP = "groups/createGroup"
+const GET_GROUPS = "groups/GET_GROUPS"
+const GET_ONE_GROUP = "groups/GET_ONE_GROUP"
+const GET_GROUP_EVENTS = "groups/GET_GROUP_EVENTS"
+const ADD_ONE = "groups/ADD_ONE"
+const ADD_GROUP_IMAGE = "groups/ADD_GROUP_IMAGE"
+const DELETE_GROUP = "groups/DELETE_GROUP"
 
 const loadGroups = (groups) => {
     return {
@@ -27,10 +29,25 @@ const loadGroupEvents = (group) => {
     }
 }
 
-const createGroup = (group) => {
+const addGroup = (group) => {
     return {
-        type: CREATE_GROUP,
+        type: ADD_ONE,
         payload: group
+    }
+}
+
+const createGroupImage = (groupId, image) => {
+    return {
+        type: ADD_GROUP_IMAGE,
+        groupId,
+        image
+    }
+}
+
+const doomedGroup = (groupId) => {
+    return {
+        type: DELETE_GROUP,
+        groupId
     }
 }
 
@@ -74,9 +91,49 @@ export const postGroup = (group) => async dispatch => {
 
     if (response.ok) {
         const newGroup = await response.json();
-        dispatch(createGroup(newGroup))
+        dispatch(addGroup(newGroup))
+        return newGroup;
     }
 }
+
+export const postGroupImage = (groupId, imageURL, preview = false) => async dispatch => {
+    const response = await csrfFetch(`/api/groups/${groupId}/images`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({imageURL, preview})
+    })
+
+    if (response.ok) {
+        const newImage = await response.json();
+        dispatch(createGroupImage(groupId, newImage))
+        return newImage
+    }
+}
+
+export const updateGroup = (group, groupId) => async dispatch => {
+    const response = await csrfFetch(`/api/groups/${groupId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(group),
+    });
+
+    if (response.ok) {
+        const editedGroup = await response.json()
+        dispatch(addGroup(editedGroup));
+        return editedGroup
+    }
+}
+
+export const destroyGroup = (groupId) => async dispatch => {
+    const response = await csrfFetch(`/api/groups/${groupId}`, {
+        method: "DELETE"
+    });
+
+    if (response.ok) {
+        dispatch(doomedGroup(groupId))
+    }
+}
+
 
 //store
 let initialState = {allGroups: {}, oneGroup: {}, events: {}};
@@ -91,8 +148,32 @@ const groupReducer = (state = initialState, action) => {
         case GET_GROUP_EVENTS:
             return {...state, events: {...action.payload}}
 
-        case CREATE_GROUP:
-            return {...state, oneGroup: {...action.payload}}
+        case ADD_ONE:
+            return {
+                ...state,
+                allGroups: {
+                    ...state.allGroups,
+                    [action.payload.id]: action.payload
+                },
+                oneGroup: {...action.payload}
+            }
+
+        case ADD_GROUP_IMAGE:
+            return {
+                ...state,
+                allGroups: {...state.allGroups},
+                oneGroup: {...state.oneGroup, GroupImages: [action.image]}
+            }
+
+        case DELETE_GROUP: {
+            const newState = {
+                ...state,
+                allGroups: {...state.allGroups},
+                oneGroup: {}
+            }
+            delete newState.allGroups[action.groupId]
+            return newState;
+        }
 
         default: return state;
     }

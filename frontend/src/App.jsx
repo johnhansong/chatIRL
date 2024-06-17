@@ -6,7 +6,8 @@ import LandingPage from "./components/LandingPage";
 import ListPage from "./components/ListPage/ListPage";
 import GroupDetailsPage from "./components/GroupDetailsPage/";
 import EventDetailsPage from "./components/EventDetailsPage/EventDetailsPage";
-import CreateGroupPage from "./components/CreateGroupPage";
+import AddGroupPage from "./components/AddGroupPage";
+import AddEventPage from "./components/AddEventPage";
 import * as sessionActions from './store/session';
 
 function Layout() {
@@ -53,9 +54,16 @@ const router = createBrowserRouter([
       },
       {
         path: '/groups/create',
-        element: <CreateGroupPage />
+        element: <AddGroupPage toggle={'create'}/>
       },
-
+      {
+        path:'/groups/:groupId/edit',
+        element: <AddGroupPage toggle={'update'}/>
+      },
+      {
+        path: '/events/create',
+        element: <AddEventPage />
+      }
     ]
   }
 ]);

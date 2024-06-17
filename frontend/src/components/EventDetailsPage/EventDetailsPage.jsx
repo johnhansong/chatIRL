@@ -25,14 +25,11 @@ const EventDetailsPage = () => {
     })
 
     useEffect(() => {
-        dispatch(fetchOneEvent(eventId))
-    }, [dispatch])
-
-    useEffect(() => {
         if (event.groupId) {
             dispatch(fetchOneGroup(event.groupId))
         }
-    }, [event])
+        dispatch(fetchOneEvent(eventId))
+    }, [event, eventId, dispatch])
 
     return ( group.Organizer &&
     <div className="event-details-wrapper">
@@ -78,7 +75,7 @@ const EventDetailsPage = () => {
                 </div>
 
                 <div className="event-details-box">
-                    <i class="fa-solid fa-map-pin"></i>
+                    <i className="fa-solid fa-map-pin"></i>
                     <h4>{event.type}</h4>
                 </div>
             </div>

@@ -12,6 +12,12 @@
     font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif;
 }
 
+.profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 #fav-icon {
     display: flex;
     align-items: center;

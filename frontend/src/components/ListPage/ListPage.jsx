@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../../store/groups';
 import { fetchEvents } from '../../store/events';
+import EventPreview from './EventDetails';
 import { useEffect } from 'react';
 import './ListPage.css';
 import { NavLink, useNavigate } from "react-router-dom";
-import { formatDate } from '../../../prettier';
 
 const ListPage = ({toggle}) => {
     const dispatch = useDispatch();
@@ -19,6 +19,7 @@ const ListPage = ({toggle}) => {
 
         return count;
     }
+
 
     useEffect(() => {
         dispatch(fetchGroups());
@@ -62,24 +63,9 @@ const ListPage = ({toggle}) => {
                 }
 
                 {toggle === 'Events' &&
-                    Object.values(events).map(event => (
-                    <div key={event.id} id='event-item'
-                        onClick={() => navigate(`/events/${event.id}`)}>
-                        <div>
-                            <img
-                                src={
-                                    event.previewImage ? event.previewImage :
-                                    'https://secure.meetupstatic.com/next/images/fallbacks/group-cover-4-wide.webp'}
-                                id='event-img'/>
-                            <div className='event-item-details'>
-                                <h4>{formatDate(event.startDate)}</h4>
-                                <h2>{event.name}</h2>
-                                <h3>{event.Venue.city}, {event.Venue.state}</h3>
-                            </div>
-                        </div>
-                            <p id='event-description'>event description here</p>
-                    </div>
-                    ))
+                    Object.values(events).map(event => {
+                        return <EventPreview event={event}/>
+                    })
                 }
             </ul>
         </div>

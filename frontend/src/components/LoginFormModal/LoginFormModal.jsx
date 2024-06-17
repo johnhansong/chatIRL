@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
 import { useModal } from '../../context/Modal';
 import './LoginForm.css'
 
@@ -11,7 +10,6 @@ function LoginFormModal() {
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
     const { closeModal } = useModal();
-    // const navigate = useNavigate();
 
     const handleCredential = (e) => {setCredential(e.target.value)}
     const handlePassword = (e) => {setPassword(e.target.value)}
@@ -28,10 +26,6 @@ function LoginFormModal() {
             }
         )
     };
-
-    // if (!Object.values(errors).length) {
-    //     () => navigate('/')
-    // };
 
     useEffect(() => {
         const errors = {};

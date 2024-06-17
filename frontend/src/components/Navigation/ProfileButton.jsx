@@ -36,7 +36,7 @@ function ProfileButton({ user }) {
     };
 
     const viewGroups = (e) => {
-        e.preventDefault
+        e.preventDefault();
         navigate('/groups')
         setShowMenu(false)
     }
