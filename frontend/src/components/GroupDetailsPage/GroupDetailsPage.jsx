@@ -6,7 +6,7 @@ import { useModal } from "../../context/Modal";
 import EventPreview from "../ListPage/EventDetails";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import AlertsModal from "../AlertsModal/AlertsModal";
-import { formatDate, sortByDate } from "../../../prettier";
+import { sortByDate } from "../../../prettier";
 import "./GroupDetailsPage.css";
 
 const GroupDetailsPage = () => {
@@ -72,76 +72,84 @@ const GroupDetailsPage = () => {
 
     if (!Object.keys(group).length || !group.Organizer) return <p>Loading...</p>
     return (Object.keys(group).length && groupEvents &&
-    <div className='group-details-wrapper'>
-            <NavLink id='back-btn' to="/groups">← Groups </NavLink>
-        <div className="group-block-1">
-            <img id="group-details-img" src={group.GroupImages ?
-                            group.GroupImages[0]?.imageURL : 'https://secure.meetupstatic.com/next/images/fallbacks/group-cover-15-wide.webp'}></img>
-            <div className="group-details">
-                <h1>{group.name}</h1>
-                <h4>{group.city}, {group.state}</h4>
-                <h4>{groupEvents.length} events · {group.private ? "Private" : "Public"}</h4>
-                <h4>Organized by {group.Organizer.firstName} {group.Organizer.lastName}</h4>
-            </div>
+    <>
+        <div className='group-details-wrapper-1'>
+                <NavLink id='back-btn' to="/groups">← Groups </NavLink>
+            <div className="group-block-1">
+                <img id="group-details-img" src={group.GroupImages.length ?
+                                group.GroupImages[0]?.imageURL : 'https://secure.meetupstatic.com/next/images/fallbacks/group-cover-15-wide.webp'}></img>
+                <div className="group-details-box">
+                    <div className="group-details">
+                        <h1>{group.name}</h1>
+                        <h4>{group.city}, {group.state}</h4>
+                        <h4>{groupEvents.length} events · {group.private ? "Private" : "Public"}</h4>
+                        <h4>Organized by {group.Organizer.firstName} {group.Organizer.lastName}</h4>
+                    </div>
 
-                {/* BUTTONS! */}
-                { user && isOrganizer(user) ? (
-                    <div className='org-group-btn'>
-                        <button onClick={handleCreateEvt}>Create Event</button>
-                        <button onClick={handleUpdateBtn}>Update</button>
-                        <OpenModalButton
-                            buttonText="Delete"
-                            modalComponent={
-                                <AlertsModal details="group"
-                                            handleDelete={deleteGroup}
-                                            type={'delete'}
-                                />}
-                        ></OpenModalButton>
+                    <div className="group-btn">
+                        {/* BUTTONS! */}
+                        { user && isOrganizer(user) ? (
+                            <div className='org-group-btn'>
+                                <button onClick={handleCreateEvt}>Create Event</button>
+                                <button onClick={handleUpdateBtn}>Update</button>
+                                <OpenModalButton
+                                    buttonText="Delete"
+                                    modalComponent={
+                                        <AlertsModal details="group"
+                                                    handleDelete={deleteGroup}
+                                                    type={'delete'}
+                                        />}
+                                ></OpenModalButton>
+                            </div>
+                        ) : user ? (
+                            <div className="join-group-btn">
+                                <OpenModalButton
+                                    buttonText="Join this group"
+                                    modalComponent={ <AlertsModal groupId="" type={'notice'}/>}
+                                ></OpenModalButton>
+                            </div>
+                        ) : null}
                     </div>
-                ) : user ? (
-                    <div className="join-group-btn">
-                        <OpenModalButton
-                            buttonText="Join this group"
-                            modalComponent={ <AlertsModal groupId="" type={'notice'}/>}
-                        ></OpenModalButton>
-                    </div>
-                ) : null}
+                </div>
+            </div>
         </div>
 
-        <div className="group-block-2">
-            <div className="organizer-details">
-                <h1>Organizer</h1>
-                <h4>{group.Organizer.firstName} {group.Organizer.lastName}</h4>
-            </div>
+        <div className="group-details-wrapper-2">
+            <div className="group-block-2">
+                <div className="organizer-details">
+                    <h1>Organizer</h1>
+                    <h4>{group.Organizer.firstName} {group.Organizer.lastName}</h4>
+                </div>
 
-            <div className="group-about">
-                <h2>What we&apos;re about</h2>
-                <p>{group.about}</p>
-            </div>
+                <div className="group-about">
+                    <h2>What we&apos;re about</h2>
+                    <p>{group.about}</p>
+                </div>
 
-            <div className="group-upcoming-events">
-                {!groupEvents.length ? (<h2>No upcoming events!</h2>) : null}
+                <div className="group-upcoming-events">
+                    {!groupEvents.length ? (<h2>No upcoming events!</h2>) : null}
 
-                {futureEvents.length ? (
-                <>
-                    <h2> Upcoming Events ({futureEvents.length})</h2>
-                    {Object.values(futureEvents).map(event => {
-                        return <EventPreview event={event}/>
-                    })}
-                </>
-                ) : null}
+                    {futureEvents.length ? (
+                    <>
+                        <h2> Upcoming Events ({futureEvents.length})</h2>
+                        {Object.values(futureEvents).map(event => {
+                            return <EventPreview event={event}/>
+                        })}
+                    </>
+                    ) : null}
 
-                {pastEvents.length ? (
-                <>
-                    <h2> Past Events ({pastEvents.length})</h2>
-                    {Object.values(pastEvents).map(event => {
-                        return <EventPreview event={event}/>
-                    })}
-                </>
-                ) : null}
+                    {pastEvents.length ? (
+                    <>
+                        <h2> Past Events ({pastEvents.length})</h2>
+                        {Object.values(pastEvents).map(event => {
+                            return <EventPreview event={event}/>
+                        })}
+                    </>
+                    ) : null}
+                </div>
             </div>
         </div>
-    </div>
+    </>
     )
 }
 

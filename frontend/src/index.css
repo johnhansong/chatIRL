@@ -1,1 +1,83 @@
 /* TODO: Add sitewide styles */
+
+#modal-content {
+    border-radius: 10px;
+}
+
+.modal-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    margin-top: 5px;
+}
+
+.modal-box > h2 {
+    font-size: 32px;
+    margin: 0%;
+}
+
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-form > h4 {
+    margin: 0px;
+}
+
+.modal-box-input-section {
+    justify-content: center;
+}
+
+.modal-box-input {
+    width: 325px;
+    height: 20px;
+    padding: 0%;
+    background-color:aliceblue;
+    border-radius: 3px;
+}
+
+.modal-btn {
+    width: 330px;
+    height: 40px;
+    margin: 20px 0px;
+    padding: 0%;
+    color: white;
+    background-color: rgba(255, 0, 0, 0.648);
+}
+
+.modal-btn:hover {
+    cursor: pointer;
+    color: white;
+    background-color: rgb(153, 2, 2);
+}
+
+.modal-btn-no {
+    width: 330px;
+    height: 40px;
+    margin: 0px;
+    padding: 0%;
+    color: white;
+    background-color: lightgrey;
+}
+.modal-btn-no:hover {
+    cursor: pointer;
+    color: white;
+    background-color: grey;
+}
+
+.modal-btn-disabled {
+    width: 330px;
+    height: 40px;
+    margin: 20px 0px;
+    padding: 0%;
+}
+
+.modal-btn-disabled:hover {
+    cursor:not-allowed;
+}

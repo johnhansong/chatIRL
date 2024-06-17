@@ -1,15 +1,10 @@
-.group-details-wrapper {
+.group-details-wrapper-1 {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
-    margin-left: 15rem;
-    margin-right: 15rem;
-}
-
-.group-block-1 {
-    display: flex;
-    flex-direction: row;
+    margin-left: 15%;
+    margin-right: 15%;
 }
 
 #back-btn {
@@ -17,17 +12,87 @@
     font-size: 16px;
 }
 
+.group-block-1 {
+    display: flex;
+    flex-direction: row;
+}
+
 #group-details-img {
     width: 550px;
     height: 375px;
     border: 2px solid black;
-    margin-right: 3%;
+    margin-right: 2%;
 }
 
-.join-group-btn > button {
-    background-color: red;
+.group-details-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.group-details {
+    align-self: start;
+}
+
+.group-details > h1 {
+    font-weight: normal;
+}
+
+.group-details > h4 {
+    font-weight: normal;
+    color: grey;
+}
+
+.group-btn {
+    display: flex;
+    gap: 20px;
+}
+
+.org-group-btn > button {
     color: white;
-    justify-self: end;
+    background-color: grey;
+    font-size: 15px;
+    margin-right: 10px;
+    padding: 5px 10px;
+}
+
+.join-group-btn {
+    align-content: flex-start;
+}
+.join-group-btn > button {
+    background-color: rgb(173, 0, 0);
+    color: white;
+    font-size: 18px;
+    padding: 10px 25px;
+}
+
+.group-details-wrapper-2 {
+    margin-top: 25px;
+    background-color: rgb(238, 234, 234);
+}
+
+.group-block-2 {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.organizer-details > h1 {
+    font-weight: normal;
+    margin-bottom: 0px;
+}
+
+.organizer-details > h4 {
+    font-weight: normal;
+    color: rgb(107, 106, 106);
+    margin-top: 10px;
+}
+
+.group-about > h2 {
+    margin-top: 0px;
 }
 
 .event-item:hover {

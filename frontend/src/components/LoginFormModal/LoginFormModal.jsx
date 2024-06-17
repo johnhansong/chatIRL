@@ -49,14 +49,16 @@ function LoginFormModal() {
             })
     }
 
+    const errorExists = Object.values(errors).length
 
     return (
         <div className="modal-box">
             <h1>Log In</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="modal-box-input">
-                    <label> Username or Email
+            <form className="modal-form" onSubmit={handleSubmit}>
+                <div className="modal-box-input-section">
+                    <label>
                         <input
+                            className="modal-box-input"
                             type="text"
                             value={credential}
                             onChange={handleCredential}
@@ -66,9 +68,10 @@ function LoginFormModal() {
                     </label>
                 </div>
 
-                <div className="modal-box-input">
-                    <label> Password
+                <div className="modal-box-input-section">
+                    <label>
                         <input
+                            className="modal-box-input"
                             type="password"
                             value={password}
                             onChange={handlePassword}
@@ -80,13 +83,11 @@ function LoginFormModal() {
                 {errors.credential && <p>{errors.credential}</p>}
 
                 <button
-                    className="modal-btn"
-                    disabled={Object.values(errors).length}
+                    className={errorExists ? "modal-btn-disabled" : "modal-btn"}
+                    disabled={errorExists}
                     type="submit"
                 >Log In</button>
-
             </form>
-
 
             <button
                 className="demo-user"

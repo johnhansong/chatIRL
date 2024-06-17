@@ -55,7 +55,7 @@ const ListPage = ({toggle}) => {
                             <div className='group-item-details'>
                                 <h2>{group.name}</h2>
                                 <h3>{group.city}, {group.state}</h3>
-                                <p>{group.about}</p>
+                                <p>{group.about.length > 250 ? group.about.slice(0, 250) + "..." : group.about}</p>
                                 <h4>{numEvents(group)} events · {group.private ? "Private" : "Public"}</h4>
                             </div>
                         </div>

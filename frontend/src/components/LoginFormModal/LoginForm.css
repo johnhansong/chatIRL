@@ -10,4 +10,20 @@ label {
 
 .errors {
     color: red;
+    align-items: start;
+}
+
+.demo-user {
+    width: 150px;
+    height: 40px;
+    background-color: transparent;
+    margin-bottom: 10px;
+    font-size: 17px;
+    border: transparent;
+    color:rgb(3, 40, 40);
+    text-decoration: underline;
+}
+
+.demo-user:hover {
+    cursor: pointer;
 }

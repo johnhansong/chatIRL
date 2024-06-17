@@ -13,6 +13,7 @@
 .event-detail-boxes {
     display: flex;
     flex-direction: column;
+    bord
 }
 
 .event-group-details:hover {

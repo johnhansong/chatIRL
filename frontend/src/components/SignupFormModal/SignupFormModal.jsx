@@ -47,6 +47,8 @@ function SignupFormModal() {
         });
     };
 
+    const errorExists = Object.values(errors).length
+
     useEffect(() => {
         const errors = {};
 
@@ -62,48 +64,96 @@ function SignupFormModal() {
     }, [email, username, firstName, lastName, password, confirmPassword])
 
     return (
-        <>
+        <div className="modal-box">
             <h1>Sign Up</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Email:
-                    <input type="text" value={email} placeholder="Email" onChange={handleEmail} required/>
-                </label>
-                {errors.email && <p>{errors.email}</p>}
+            <form className="modal-form" onSubmit={handleSubmit}>
+                <div className="modal-box-input-section">
+                    <label>
+                        <input
+                            className="modal-box-input"
+                            type="text" value={email}
+                            placeholder="Email"
+                            onChange={handleEmail}
+                            required
+                        />
+                    </label>
+                </div>
+                {errors.email && <p className='errors' >{errors.email}</p>}
 
-                <label>
-                    UserName:
-                    <input type="text" value={username} placeholder="Username" onChange={handleUsername} required/>
-                </label>
-                {errors.username && <p>{errors.username}</p>}
+                <div className="modal-box-input-section">
+                    <label>
+                        <input
+                            className="modal-box-input"
+                            type="text"
+                            value={username}
+                            placeholder="Username"
+                            onChange={handleUsername}
+                            required
+                        />
+                    </label>
+                </div>
+                {errors.username && <p className='errors'>{errors.username}</p>}
 
-                <label>
-                    First Name:
-                    <input type="text" value={firstName} placeholder="First Name" onChange={handleFirstName} required/>
-                </label>
-                {errors.firstName && <p>{errors.firstName}</p>}
+                <div className="modal-box-input-section">
+                    <label>
+                        <input
+                            className ="modal-box-input"
+                            type="text"
+                            value={firstName}
+                            placeholder="First Name"
+                            onChange={handleFirstName}
+                            required
+                        />
+                    </label>
+                </div>
+                    {errors.firstName && <p className='errors'>{errors.firstName}</p>}
 
-                <label>
-                    Last Name:
-                    <input type="text" value={lastName} placeholder="Last Name" onChange={handleLastName} required/>
-                </label>
-                {errors.lastName && <p>{errors.lastName}</p>}
+                <div className="modal-box-input-section">
+                    <label>
+                        <input
+                            className ="modal-box-input"
+                            type="text"
+                            value={lastName}
+                            placeholder="Last Name"
+                            onChange={handleLastName}
+                            required
+                        />
+                    </label>
+                </div>
+                {errors.lastName && <p className='errors'>{errors.lastName}</p>}
 
-                <label>
-                    Password:
-                    <input type="password" value={password} placeholder="Password" onChange={handlePassword} required/>
-                </label>
-                {errors.password && <p>{errors.password}</p>}
+                <div className="modal-box-input-section">
+                    <label>
+                        <input
+                            className ="modal-box-input"
+                            type="password"
+                            value={password}
+                            placeholder="Password"
+                            onChange={handlePassword}
+                            required
+                        />
+                    </label>
+                </div>
+                {errors.password && <p className='errors'>{errors.password}</p>}
 
-                <label>
-                    Confirm Password:
-                    <input type="password" value={confirmPassword} placeholder="Confirm Password" onChange={handleConfirmPassword} required/>
-                </label>
-                {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+                <div className="modal-box-input-section">
+                    <label>
+                        <input
+                            className ="modal-box-input"
+                            type="password"
+                            value={confirmPassword}
+                            placeholder="Confirm Password"
+                            onChange={handleConfirmPassword}
+                            required
+                        />
+                    </label>
+                </div>
+                {errors.confirmPassword && <p className='errors'>{errors.confirmPassword}</p>}
 
-                <button disabled={Object.values(errors).length} id="signup-button" type="submit">Sign Up</button>
+                <button className={errorExists ? "modal-btn-disabled" : "modal-btn"}
+                    disabled={errorExists} id="signup-button" type="submit">Sign Up</button>
             </form>
-        </>
+        </div>
     );
 }
 

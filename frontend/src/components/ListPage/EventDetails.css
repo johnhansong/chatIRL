@@ -1,0 +1,10 @@
+#event-item-wrapper {
+    border-bottom: 1px black solid
+}
+
+.event-item {
+    display: flex;
+    flex-direction: row;
+    padding-top: 12px;
+    padding-bottom: 0px;
+}

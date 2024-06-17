@@ -76,7 +76,7 @@ const AddGroupPage = ({toggle}) => {
                     setErrors({...data.errors, ...error})
                 }
         })}
-        if (group && toggle == 'create') {
+        if (group && (toggle == 'create')) {
             dispatch(postGroupImage(group.id, image, true))
         }
 
