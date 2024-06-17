@@ -116,9 +116,9 @@ export const postEventImage = (eventId, url, preview = false) => async dispatch 
 }
 
 export const destroyEvent = (eventId) => async dispatch => {
-    const response = await csrfFetch(`api/events/${eventId}`, {
+    const response = await csrfFetch(`/api/events/${eventId}`, {
         method: "DELETE"
-    })
+    });
 
     if (response.ok) {
         dispatch(doomedEvent(eventId))

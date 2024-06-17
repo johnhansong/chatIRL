@@ -22,7 +22,7 @@ const EventDetailsPage = () => {
         }
         return {}
     })
-
+    const currGroupId = event.groupId
     const group = useSelector((state) => {
         if (event.groupId == state.groups.oneGroup.id) {
             return state.groups.oneGroup
@@ -31,8 +31,8 @@ const EventDetailsPage = () => {
     })
 
     const deleteEvent = () => {
-        dispatch(destroyEvent(event))
-        navigate(`/groups/${event.groupId}`)
+        dispatch(destroyEvent(eventId))
+        navigate(`/groups/${currGroupId}`)
         closeModal();
     }
 
@@ -43,6 +43,7 @@ const EventDetailsPage = () => {
         dispatch(fetchOneEvent(eventId))
     }, [event.groupId, eventId, dispatch])
 
+    
     return ( group.Organizer &&
     <div className="event-details-wrapper">
         <div className="event-details-header">

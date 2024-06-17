@@ -5,7 +5,7 @@ function AlertsModal(feature) {
     const { closeModal } = useModal();
     const { handleDelete } = feature;
 
-    console.log(feature.details)
+    console.log(handleDelete)
 
     return (
     <div>

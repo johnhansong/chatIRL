@@ -19,9 +19,9 @@ function EventPreview({event}) {
 
     const eventDetail = getEvents.filter(event => event.id == eventId)
 
-    if (!eventDetail) return <p>Loading...</p>
+    if (!eventDetail || !event.Venue) return <p>Loading...</p>
     return ( event &&
-        <div id='event-item'
+        <div key={eventId} id='event-item'
             onClick={() => navigate(`/events/${event.id}`)}>
             <div>
                 <img

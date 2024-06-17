@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate, NavLink } from "react-router-dom";
 import { fetchOneGroup, fetchGroupEvents, destroyGroup } from "../../store/groups";
 import { useModal } from "../../context/Modal";
+import EventPreview from "../ListPage/EventDetails";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import AlertsModal from "../AlertsModal/AlertsModal";
 import { formatDate, sortByDate } from "../../../prettier";
@@ -119,56 +120,23 @@ const GroupDetailsPage = () => {
             </div>
 
             <div className="group-upcoming-events">
-                {groupEvents.length ? (<h2>No upcoming events!</h2>) : null}
+                {!groupEvents.length ? (<h2>No upcoming events!</h2>) : null}
 
                 {futureEvents.length ? (
-                    <>
-                        <h2> Upcoming Events ({futureEvents.length})</h2>
-                            {Object.values(futureEvents).map(event => (
-                                <div key={event.id} id='group-event-item'
-                                onClick={() => navigate(`/events/${event.id}`)}>
-                                <div className="event-item">
-                                    <img
-                                        src={
-                                            event.previewImage ? event.previewImage :
-                                            'https://secure.meetupstatic.com/next/images/fallbacks/group-cover-4-wide.webp'}
-                                        id='event-img'/>
-                                    <div className='event-item-details'>
-                                        <h4>{formatDate(event.startDate)}</h4>
-                                        <h2>{event.name}</h2>
-                                        <h3>{event.Venue.city}, {event.Venue.state}</h3>
-                                    </div>
-                                </div>
-                                    <p id='event-description'>event description here</p>
-                            </div>
-                            ))
-                            }
-                    </>
+                <>
+                    <h2> Upcoming Events ({futureEvents.length})</h2>
+                    {Object.values(futureEvents).map(event => {
+                        return <EventPreview event={event}/>
+                    })}
+                </>
                 ) : null}
 
                 {pastEvents.length ? (
-                    <>
+                <>
                     <h2> Past Events ({pastEvents.length})</h2>
-
-                    {Object.values(pastEvents).map(event => (
-                        <div key={event.id} id='group-event-item'
-                        onClick={() => navigate(`/events/${event.id}`)}>
-                            <div>
-                                <img
-                                    src={
-                                        event.previewImage ? event.previewImage :
-                                        'https://secure.meetupstatic.com/next/images/fallbacks/group-cover-4-wide.webp'}
-                                    id='event-img'/>
-                                <div className='event-item-details'>
-                                    <h4>{formatDate(event.startDate)}</h4>
-                                    <h2>{event.name}</h2>
-                                    <h3>{event.Venue.city}, {event.Venue.state}</h3>
-                                </div>
-                            </div>
-                            <p id='event-description'>event description here</p>
-                        </div>
-                    ))
-                    }
+                    {Object.values(pastEvents).map(event => {
+                        return <EventPreview event={event}/>
+                    })}
                 </>
                 ) : null}
             </div>

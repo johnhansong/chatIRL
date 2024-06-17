@@ -51,30 +51,40 @@ function LoginFormModal() {
 
 
     return (
-        <>
+        <div className="modal-box">
             <h1>Log In</h1>
             <form onSubmit={handleSubmit}>
-                <label> Username or Email
-                    <input
-                        type="text"
-                        value={credential}
-                        onChange={handleCredential}
-                        placeholder="Username or Email"
-                        required
-                    />
-                </label>
+                <div className="modal-box-input">
+                    <label> Username or Email
+                        <input
+                            type="text"
+                            value={credential}
+                            onChange={handleCredential}
+                            placeholder="Username or Email"
+                            required
+                        />
+                    </label>
+                </div>
 
-                <label> Password
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={handlePassword}
-                        placeholder="Password"
-                        required
-                    />
-                </label>
+                <div className="modal-box-input">
+                    <label> Password
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={handlePassword}
+                            placeholder="Password"
+                            required
+                        />
+                    </label>
+                </div>
                 {errors.credential && <p>{errors.credential}</p>}
-                <button disabled={Object.values(errors).length} type="submit">Log In</button>
+
+                <button
+                    className="modal-btn"
+                    disabled={Object.values(errors).length}
+                    type="submit"
+                >Log In</button>
+
             </form>
 
 
@@ -82,7 +92,7 @@ function LoginFormModal() {
                 className="demo-user"
                 onClick={demo}
             >Demo User</button>
-        </>
+        </div>
     );
 }
 
