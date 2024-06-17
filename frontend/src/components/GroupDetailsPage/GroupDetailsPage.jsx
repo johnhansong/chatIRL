@@ -54,6 +54,10 @@ const GroupDetailsPage = () => {
         navigate(`/groups/${groupId}/edit`)
     }
 
+    const handleCreateEvt = () => {
+        navigate(`/groups/${groupId}/events/create`)
+    }
+
     const deleteGroup = () => {
         dispatch(destroyGroup(groupId))
         navigate('/groups')
@@ -82,11 +86,15 @@ const GroupDetailsPage = () => {
                 {/* BUTTONS! */}
                 { user && isOrganizer(user) ? (
                     <div className='org-group-btn'>
-                        <button >Create Event</button>
+                        <button onClick={handleCreateEvt}>Create Event</button>
                         <button onClick={handleUpdateBtn}>Update</button>
                         <OpenModalButton
                             buttonText="Delete"
-                            modalComponent={<AlertsModal handleDelete={deleteGroup} type={'delete'} />}
+                            modalComponent={
+                                <AlertsModal details="group"
+                                            handleDelete={deleteGroup}
+                                            type={'delete'}
+                                />}
                         ></OpenModalButton>
                     </div>
                 ) : user ? (

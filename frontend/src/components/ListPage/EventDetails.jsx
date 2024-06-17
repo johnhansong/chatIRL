@@ -19,9 +19,9 @@ function EventPreview({event}) {
 
     const eventDetail = getEvents.filter(event => event.id == eventId)
 
-
+    if (!eventDetail) return <p>Loading...</p>
     return ( event &&
-        <div key={event.id} id='event-item'
+        <div id='event-item'
             onClick={() => navigate(`/events/${event.id}`)}>
             <div>
                 <img
@@ -35,7 +35,7 @@ function EventPreview({event}) {
                     <h3>{event.Venue.city}, {event.Venue.state}</h3>
                 </div>
             </div>
-                <p id='event-description'>{eventDetail[0].description}</p>
+                <p id='event-description'>{eventDetail[0]?.description}</p>
         </div>
     )
 }

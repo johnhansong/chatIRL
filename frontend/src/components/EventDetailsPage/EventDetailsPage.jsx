@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
-import { fetchOneEvent } from '../../store/events';
+import { fetchOneEvent, destroyEvent } from '../../store/events';
 import { fetchOneGroup } from '../../store/groups';
+import OpenModalButton from '../OpenModalButton/OpenModalButton';
+import { useModal } from '../../context/Modal'
+import AlertsModal from '../AlertsModal/AlertsModal';
 import { formatDate } from '../../../prettier';
 import './EventDetailsPage.css'
 
@@ -10,13 +13,16 @@ const EventDetailsPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const params = useParams();
+    const { closeModal } = useModal();
     const eventId = params.eventId;
+    const user = useSelector((state) => state.session.user)
     const event = useSelector((state) => {
         if (eventId == state.events.oneEvent.id) {
             return state.events.oneEvent
         }
         return {}
     })
+
     const group = useSelector((state) => {
         if (event.groupId == state.groups.oneGroup.id) {
             return state.groups.oneGroup
@@ -24,12 +30,18 @@ const EventDetailsPage = () => {
         return {}
     })
 
+    const deleteEvent = () => {
+        dispatch(destroyEvent(event))
+        navigate(`/groups/${event.groupId}`)
+        closeModal();
+    }
+
     useEffect(() => {
         if (event.groupId) {
             dispatch(fetchOneGroup(event.groupId))
         }
         dispatch(fetchOneEvent(eventId))
-    }, [event, eventId, dispatch])
+    }, [event.groupId, eventId, dispatch])
 
     return ( group.Organizer &&
     <div className="event-details-wrapper">
@@ -78,6 +90,18 @@ const EventDetailsPage = () => {
                     <i className="fa-solid fa-map-pin"></i>
                     <h4>{event.type}</h4>
                 </div>
+                {user?.id === group.Organizer.id ? (
+                    <div>
+                        <OpenModalButton
+                            buttonText="Delete"
+                            modalComponent={
+                                <AlertsModal details="event"
+                                            handleDelete={deleteEvent}
+                                            type='delete'
+                                />}
+                        ></OpenModalButton>
+                    </div>
+                ) : null}
             </div>
         </div>
 

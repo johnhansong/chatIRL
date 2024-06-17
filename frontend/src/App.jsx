@@ -61,7 +61,7 @@ const router = createBrowserRouter([
         element: <AddGroupPage toggle={'update'}/>
       },
       {
-        path: '/events/create',
+        path: '/groups/:groupId/events/create',
         element: <AddEventPage />
       }
     ]

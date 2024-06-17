@@ -66,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull:false,
       validate: {
-        isAfter: new Date(Date.now()).toLocaleString('en-us',
+        isAfter: new Date().toLocaleString('en-us',
         {hour12:false}).split('/').join('-').split(',').join(' ')
       },
       // get() {

@@ -24,4 +24,8 @@ const sortByDate = (array) => {
     return array.sort(sorter)
 }
 
-export { formatDate, sortByDate }
+const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export { formatDate, sortByDate, capitalizeFirstLetter }

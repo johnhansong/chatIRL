@@ -72,7 +72,6 @@ const AddGroupPage = ({toggle}) => {
             group = await dispatch(postGroup(payload))
             .catch(async (res) => {
                 const data = await res.json();
-                console.log("DATA?", data)
                 if (data?.errors) {
                     setErrors({...data.errors, ...error})
                 }
@@ -85,7 +84,6 @@ const AddGroupPage = ({toggle}) => {
             group = await dispatch(updateGroup(payload, groupId))
             .catch(async (res) => {
                 const data = await res.json();
-                console.log("DATA?", data)
                 if (data?.errors) {
                     setErrors({...data.errors, ...error})
                 }
