@@ -4,9 +4,6 @@ import { capitalizeFirstLetter } from "../../../prettier";
 function AlertsModal(feature) {
     const { closeModal } = useModal();
     const { handleDelete } = feature;
-
-    console.log(handleDelete)
-
     return (
     <div className="modal-box">
         {feature.type == 'notice' ? (

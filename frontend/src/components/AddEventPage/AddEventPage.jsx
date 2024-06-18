@@ -54,7 +54,6 @@ const AddEventPage = () => {
 
         const event = await dispatch(postEvent(payload, groupId))
             .catch(async (res) => {
-                console.log("RES", res)
                 const data = await res.json();
                 if (data?.errors) {
                     setErrors({...data.errors, ...error})
