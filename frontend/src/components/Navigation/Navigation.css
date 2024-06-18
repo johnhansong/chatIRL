@@ -118,3 +118,15 @@ button:hover {
     font-size: 15px;
     cursor: pointer;
 }
+
+.nav-bar-new-group {
+    color: rgb(14, 96, 96);
+    text-decoration: none;
+    font-weight: 420;
+}
+
+.nav-bar-new-group:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: rgb(7, 53, 53);
+}

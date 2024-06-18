@@ -1,0 +1,43 @@
+.create-form-wrapper {
+    margin: 0% 30%;
+}
+
+.set-event-section {
+    border-bottom: solid gray 3px;
+    margin: 15px 0px;
+}
+
+.set-event-section > input {
+    background-color: aliceblue;
+    padding: 5px;
+    width: 250px;
+    max-width: 75%;
+}
+
+.set-event-description > textarea {
+    background: aliceblue;
+    padding: 5px;
+    width: 100%;
+    height: 100px;
+}
+
+.set-event-section > select {
+    background-color: aliceblue;
+    padding: 5px
+}
+
+.form-submit-btn {
+    width: 150px;
+    height: 40px;
+    font-size: 18px;
+    margin: 20px 0px;
+    padding: 0%;
+    color: white;
+    background-color: rgba(255, 0, 0, 0.648);
+}
+
+.form-submit-btn:hover {
+    cursor: pointer;
+    color: white;
+    background-color: rgb(153, 2, 2);
+}

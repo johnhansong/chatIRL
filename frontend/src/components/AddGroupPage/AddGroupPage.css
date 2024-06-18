@@ -1,0 +1,42 @@
+.create-form-wrapper {
+    margin: 0% 15%;
+}
+
+.set-group-section {
+    border-bottom: solid gray 1px;
+}
+
+.set-group-section > input {
+    background-color: aliceblue;
+    padding: 5px;
+    width: 350px;
+    max-width: 50%;
+}
+
+.set-group-section > textarea {
+    background: aliceblue;
+    padding: 5px;
+    width: 350px;
+    height: 125px;
+}
+
+.set-group-section > select {
+    background-color: aliceblue;
+    padding: 5px
+}
+
+.form-submit-btn {
+    width: 150px;
+    height: 40px;
+    font-size: 18px;
+    margin: 20px 0px;
+    padding: 0%;
+    color: white;
+    background-color: rgba(255, 0, 0, 0.648);
+}
+
+.form-submit-btn:hover {
+    cursor: pointer;
+    color: white;
+    background-color: rgb(153, 2, 2);
+}

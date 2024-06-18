@@ -72,9 +72,9 @@ const AddEventPage = () => {
     }, [dispatch])
 
     return (
-        <div className="add-event-wrapper">
+        <div className="create-form-wrapper">
             <form onSubmit={handleSubmit}>
-                <div className="create-event">
+                <div className="set-event-section">
                     <h2>Create an event for {group.name}</h2>
 
                     <h4>What is the name of your event?</h4>
@@ -85,7 +85,7 @@ const AddEventPage = () => {
                     <p className="errors">{errors.name}</p>
                 </div>
 
-                <div className="create-event">
+                <div className="set-event-section">
                     <label>Is this an in person or online event?</label>
                     <select onChange={handleType}>
                         <option value="" hidden>(Select One)</option>
@@ -103,7 +103,7 @@ const AddEventPage = () => {
                     <p className="errors">{errors.price}</p>
                 </div>
 
-                <div className="create-event">
+                <div className="set-event-section">
                     <label>When does your event start?</label>
                         <input
                             type="datetime-local"
@@ -119,7 +119,7 @@ const AddEventPage = () => {
                     <p className="errors">{errors.endDate}</p>
                 </div>
 
-                <div className="create-event">
+                <div className="set-event-section">
                     <label>Please add in image url for your group below:</label>
                     <input
                         placeholder="image URL"
@@ -128,7 +128,7 @@ const AddEventPage = () => {
                     <p className="errors">{errors.image}</p>
                 </div>
 
-                <div className="create-event">
+                <div className="set-event-description">
                     <label>Please describe your event</label>
                     <textarea
                         placeholder="Please include at least 30 characters"
@@ -138,6 +138,7 @@ const AddEventPage = () => {
                 </div>
 
                 <button
+                    className="form-submit-btn"
                     type="submit"
                 >Create Event</button>
 

@@ -94,7 +94,7 @@ const AddGroupPage = ({toggle}) => {
     }
 
     return (
-    <div>
+    <div className="create-form-wrapper">
         <div className="add-group-header">
             {toggle == 'create' && <>
                 <h4>BECOME AN ORGANIZER</h4>
@@ -107,7 +107,7 @@ const AddGroupPage = ({toggle}) => {
         </div>
 
         <form onSubmit={handleSubmit}>
-            <div className="set-group-location">
+            <div className="set-group-section">
                 <h2>First, set your group&apos;s location.</h2>
                 <p>
                     Meetup groups meet locally, in person and online. We&apos;ll connect
@@ -121,8 +121,8 @@ const AddGroupPage = ({toggle}) => {
                 <p className="errors">{errors.location}</p>
             </div>
 
-            <div className="set-group-name">
-                <h2>What will your group&apos;s name be</h2>
+            <div className="set-group-section">
+                <h2>What is the name of your group?</h2>
                 <p>
                     Choose a name that will give people a clear idea of what the group is about.
                     Feel free to get creative! You can edit this later if you change your mind.
@@ -135,7 +135,7 @@ const AddGroupPage = ({toggle}) => {
                 <p className="errors">{errors.name}</p>
             </div>
 
-            <div className="set-group-description">
+            <div className="set-group-section">
                 <h2>Now describe what your group will be about</h2>
                 <p>People will see this when we promote your group, but you&apos;ll be able to add to it later, too</p>
                 <ol>
@@ -151,7 +151,7 @@ const AddGroupPage = ({toggle}) => {
                 <p className="errors">{errors.about}</p>
             </div>
 
-            <div className="set-final-steps">
+            <div className="set-group-section">
                 <h2>Final steps...</h2>
 
                 <label>Is this an in-person or online group?</label>
@@ -180,7 +180,7 @@ const AddGroupPage = ({toggle}) => {
                 </>}
             </div>
 
-            <button type='submit'>
+            <button className="form-submit-btn" type='submit'>
                 {toggle=='create' && 'Create Group'}
                 {toggle=='update' && 'Update Group'}
             </button>

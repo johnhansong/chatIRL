@@ -1,19 +1,74 @@
-.event-details-wrapper {
+.event-details-wrapper-1 {
+    width: 100%;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px ;
+}
+
+.event-box-1 {
     display: flex;
     flex-direction: column;
+    align-self: center;
     justify-content: center;
+    width: 80%;
+    margin: 0% 15%;
+}
 
+.event-title > h1 {
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+.event-title > h4 {
+    font-weight: normal;
+    color: grey;
+    margin-top: 0px;
+}
+
+.event-details-wrapper-2 {
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background: rgb(229, 229, 229);
+}
+
+.event-box-2 {
+    margin: 0% 15%;
 }
 
 .event-boxes {
+    width: 100%;
     display: flex;
     flex-direction: row;
+}
+
+#event-image {
+    width: 550px;
+    height: 375px;
+    border: 1px solid black;
+    margin-right: 2%;
 }
 
 .event-detail-boxes {
     display: flex;
     flex-direction: column;
-    bord
+    width: 100%;
+    max-height: 550px;
+    max-width: 750px;
+}
+
+#event-group-image {
+    width: 100px;
+    height: 75px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    margin-right: 5%;
+    border-radius: 5px;
 }
 
 .event-group-details:hover {
@@ -23,9 +78,86 @@
 .event-group-details {
     display: flex;
     flex-direction: row;
+    padding: 15px;
+    background-color: white;
+    border-radius: 7px;
+}
+
+.event-group-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.event-group-info > h3 {
+    margin: 0px;
+    padding-bottom: 5px;
+    font-weight: normal;
+}
+
+.event-group-info > h4 {
+    margin-top: 0px;
+    font-weight: normal;
+    color: grey
+}
+
+.event-logistics {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: white;
+    margin-top: 15px;
+    border-radius: 7px;
+    padding: 15px;
 }
 
 .event-details-box {
     display: flex;
     flex-direction: row;
+    color: grey;
+    width: 100%;
+}
+
+.event-details-box-btn {
+    display: flex;
+    flex-direction: row;
+    color: grey;
+}
+
+.event-details-box > h4 {
+    font-weight: normal;
+}
+
+.event-details-box > i {
+    font-size: 25px;
+    margin: 20px 20px;
+}
+
+#event-type-text{
+    margin-right: 30px;
+}
+
+.event-delete-btn {
+    align-content: end;
+    margin: 20px 0px;
+}
+
+.event-delete-btn > button {
+    color: white;
+    background-color: grey;
+    font-size: 15px;
+    margin-right: 10px;
+    padding: 5px 10px;
+}
+
+.event-delete-btn > button:hover {
+    cursor: pointer;
+    background-color: rgb(70, 68, 68)
+}
+
+.start-end-labels {
+    margin-right: 7%;
+}
+
+.event-description > h2 {
+    font-weight: normal;
 }

@@ -39,7 +39,7 @@ function Navigation({ isLoaded }) {
                 </NavLink>
             </li>
             <div className='profile'>
-                {sessionUser && <NavLink to="/groups/create" className="new"> Start a new group</NavLink>}
+                {sessionUser && <NavLink to="/groups/create" className="nav-bar-new-group"> Start a new group</NavLink>}
                 {isLoaded && sessionLinks}
             </div>
         </ul>
