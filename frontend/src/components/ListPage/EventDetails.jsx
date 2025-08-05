@@ -19,7 +19,6 @@ function EventPreview({event}) {
     }, [dispatch, eventId])
 
     const eventDetail = getEvents.filter(event => event.id == eventId)
-    console.log(eventDetail)
 
     if (!eventDetail.length || !event.Venue) return <p>Loading...</p>
     return ( event &&
